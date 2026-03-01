@@ -37,7 +37,7 @@ function AdminComplaints() {
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-black">Complaints</h1>
         <p className="text-neutral-500 mt-1">
-          View and manage all complaints submitted by users. Changes here are reflected in the user portal.
+          View and manage complaints submitted by students. Status updates are reflected in the Student Portal.
         </p>
       </div>
 

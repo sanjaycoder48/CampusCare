@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import FileComplaint from "./pages/FileComplaint.jsx";
 import ReportEmergency from "./pages/ReportEmergency.jsx";
 import MyComplaints from "./pages/MyComplaints.jsx";
+import Login from "./pages/Login.jsx";
 import AdminLayout from "./admin/AdminLayout.jsx";
 import AdminDashboard from "./admin/AdminDashboard.jsx";
 import AdminComplaints from "./admin/AdminComplaints.jsx";
@@ -16,6 +17,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<App />}>
           <Route index element={<Dashboard />} />
           <Route path="file-complaint" element={<FileComplaint />} />

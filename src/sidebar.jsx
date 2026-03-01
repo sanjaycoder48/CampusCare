@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, PenLine, AlertTriangle, FileText, User } from "lucide-react";
+import { LayoutDashboard, PenLine, AlertTriangle, FileText, User, ExternalLink } from "lucide-react";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -19,7 +19,7 @@ function Sidebar() {
           </div>
           <div>
             <span className="font-semibold text-lg tracking-tight">CampusCare</span>
-            <p className="text-xs text-neutral-500">User Portal</p>
+            <p className="text-xs text-neutral-500">Student Portal</p>
           </div>
         </NavLink>
 
@@ -44,8 +44,20 @@ function Sidebar() {
           ))}
         </nav>
 
+        {/* Admin Portal (new tab) */}
+        <div className="mt-auto pt-6 border-t border-neutral-200 space-y-1">
+          <a
+            href="/admin"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-neutral-100 transition-colors text-sm font-medium text-neutral-600"
+          >
+            <ExternalLink size={18} />
+            <span>Admin Portal</span>
+          </a>
+        </div>
         {/* User Section */}
-        <div className="mt-auto pt-6 border-t border-neutral-200">
+        <div className="pt-2">
           <button className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-neutral-100 transition-colors text-left">
             <div className="flex items-center justify-center w-9 h-9 rounded-full bg-neutral-200 text-neutral-700 font-medium text-sm shrink-0">
               JD

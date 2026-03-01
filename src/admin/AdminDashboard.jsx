@@ -29,7 +29,7 @@ function AdminDashboard() {
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-black">Admin Overview</h1>
         <p className="text-neutral-500 mt-1">
-          High-level view of complaints and emergencies coming from the user portal.
+          Overview of complaints and emergencies reported by campus students.
         </p>
       </div>
 

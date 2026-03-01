@@ -1,22 +1,22 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import Sidebar from "./sidebar.jsx";
+import AdminSidebar from "./AdminSidebar.jsx";
 
-function App() {
+function AdminLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
     const role = localStorage.getItem("campuscare-role");
     if (!role) {
       navigate("/login", { replace: true });
-    } else if (role === "admin") {
-      navigate("/admin", { replace: true });
+    } else if (role === "student") {
+      navigate("/", { replace: true });
     }
   }, [navigate]);
 
   return (
     <div className="flex min-h-screen bg-neutral-50">
-      <Sidebar />
+      <AdminSidebar />
       <main className="flex-1 overflow-auto">
         <Outlet />
       </main>
@@ -24,4 +24,5 @@ function App() {
   );
 }
 
-export default App;
+export default AdminLayout;
+

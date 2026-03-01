@@ -64,7 +64,7 @@ function Dashboard() {
     <div className="p-8">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-black">Dashboard</h1>
-        <p className="text-neutral-500 mt-1">Track your complaints and report issues</p>
+        <p className="text-neutral-500 mt-1">Track your complaints and report campus issues</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

@@ -36,7 +36,7 @@ function AdminEmergencies() {
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-black">Emergencies</h1>
         <p className="text-neutral-500 mt-1">
-          Review emergencies reported from the user portal and update their status.
+          Review emergencies reported by students and update their status.
         </p>
       </div>
 
@@ -47,7 +47,7 @@ function AdminEmergencies() {
         <div className="divide-y divide-neutral-100">
           {reportedByUsers.length === 0 ? (
             <div className="px-6 py-8 text-center text-neutral-500 text-sm">
-              No emergencies reported yet from the user portal.
+              No emergencies reported yet by students.
             </div>
           ) : (
             reportedByUsers.map(
