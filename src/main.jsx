@@ -4,7 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
-import EmergencyLog from "./pages/EmergencyLog.jsx";
+import FileComplaint from "./pages/FileComplaint.jsx";
+import ReportEmergency from "./pages/ReportEmergency.jsx";
 import MyComplaints from "./pages/MyComplaints.jsx";
 
 createRoot(document.getElementById("root")).render(
@@ -13,7 +14,8 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Dashboard />} />
-          <Route path="emergency-log" element={<EmergencyLog />} />
+          <Route path="file-complaint" element={<FileComplaint />} />
+          <Route path="report-emergency" element={<ReportEmergency />} />
           <Route path="complaints" element={<MyComplaints />} />
         </Route>
       </Routes>

@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom";
-import { Newspaper, BellElectric, ScrollText, Shield } from "lucide-react";
+import { LayoutDashboard, PenLine, AlertTriangle, FileText, User } from "lucide-react";
 
 const navItems = [
-  { to: "/", icon: Newspaper, label: "Dashboard" },
-  { to: "/emergency-log", icon: BellElectric, label: "Emergency Log" },
-  { to: "/complaints", icon: ScrollText, label: "My Complaints" },
+  { to: "/", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/file-complaint", icon: PenLine, label: "File Complaint" },
+  { to: "/report-emergency", icon: AlertTriangle, label: "Report Emergency" },
+  { to: "/complaints", icon: FileText, label: "My Complaints" },
 ];
 
 function Sidebar() {
@@ -14,11 +15,11 @@ function Sidebar() {
         {/* Logo / Brand */}
         <NavLink to="/" className="flex items-center gap-3 mb-8 px-2">
           <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-black/10 text-black">
-            <Shield size={22} strokeWidth={2} />
+            <User size={22} strokeWidth={2} />
           </div>
           <div>
             <span className="font-semibold text-lg tracking-tight">CampusCare</span>
-            <p className="text-xs text-neutral-500">Admin Portal</p>
+            <p className="text-xs text-neutral-500">User Portal</p>
           </div>
         </NavLink>
 
@@ -43,7 +44,7 @@ function Sidebar() {
           ))}
         </nav>
 
-        {/* User Section - pushed to bottom */}
+        {/* User Section */}
         <div className="mt-auto pt-6 border-t border-neutral-200">
           <button className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-neutral-100 transition-colors text-left">
             <div className="flex items-center justify-center w-9 h-9 rounded-full bg-neutral-200 text-neutral-700 font-medium text-sm shrink-0">
@@ -51,7 +52,7 @@ function Sidebar() {
             </div>
             <div className="flex flex-col items-start min-w-0">
               <span className="text-sm font-medium text-neutral-800 truncate w-full">John Doe</span>
-              <span className="text-xs text-neutral-500">Admin</span>
+              <span className="text-xs text-neutral-500">Student</span>
             </div>
           </button>
         </div>
