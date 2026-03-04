@@ -1,9 +1,10 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AdminSidebar from "./AdminSidebar.jsx";
 
 function AdminLayout() {
   const navigate = useNavigate();
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
     const role = localStorage.getItem("campuscare-role");
@@ -11,8 +12,14 @@ function AdminLayout() {
       navigate("/login", { replace: true });
     } else if (role === "student") {
       navigate("/", { replace: true });
+    } else {
+      setIsAuthorized(true);
     }
   }, [navigate]);
+
+  if (!isAuthorized) {
+    return null;
+  }
 
   return (
     <div className="flex min-h-screen bg-neutral-50">
