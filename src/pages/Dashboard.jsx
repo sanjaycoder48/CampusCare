@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileText, AlertTriangle, PenLine, Clock } from "lucide-react";
+import { FileText, AlertTriangle, PenLine, Clock, ChevronRight } from "lucide-react";
 
 const COMPLAINTS_KEY = "campuscare-complaints";
 const EMERGENCIES_KEY = "campuscare-emergencies";
 
 function formatTimeAgo(dateStr) {
-  if (!dateStr) return "";
+  if (!dateStr) return "Just now";
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
   const hrs = Math.floor(diff / 3600000);
-  if (mins < 60) return `${mins} mins ago`;
+  if (mins < 60) return `${mins || 1} mins ago`;
   if (hrs < 24) return `${hrs} hrs ago`;
   return `${Math.floor(hrs / 24)} days ago`;
 }
@@ -35,9 +35,9 @@ function Dashboard() {
     return () => window.removeEventListener("storage", load);
   }, []);
 
-  const myPendingComplaints = complaints.filter((c) => c.status === "Pending").length;
+  const myPendingComplaints = complaints.filter((c) => c.status === "Pending" || !c.status).length;
   const myReportedEmergencies = emergencies.filter((e) => e.reportedBy === "user").length;
-  const recentComplaints = complaints.slice(0, 3);
+  const recentComplaints = complaints.slice(0, 4);
 
   const stats = [
     {
@@ -45,45 +45,55 @@ function Dashboard() {
       value: String(myPendingComplaints),
       icon: FileText,
       onClick: () => navigate("/complaints"),
+      bg: "bg-neutral-50",
+      iconBg: "bg-white border border-neutral-200 shadow-sm text-black"
     },
     {
       label: "Emergencies I Reported",
       value: String(myReportedEmergencies),
       icon: AlertTriangle,
       onClick: () => navigate("/complaints"),
+      bg: "bg-neutral-50",
+      iconBg: "bg-white border border-rose-100 shadow-sm text-rose-600"
     },
     {
       label: "File New Complaint",
       icon: PenLine,
       action: true,
       onClick: () => navigate("/file-complaint"),
+      bg: "bg-black",
+      iconBg: "bg-white/10 text-white"
     },
   ];
 
   return (
-    <div className="p-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-black">Dashboard</h1>
-        <p className="text-neutral-500 mt-1">Track your complaints and report campus issues</p>
+    <div className="p-4 sm:p-8 max-w-6xl mx-auto">
+      <div className="mb-8 sm:mb-10">
+        <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">Dashboard</h1>
+        <p className="text-sm sm:text-base text-neutral-500 mt-2">Welcome back! Track your complaints and report campus issues</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {stats.map(({ label, value, icon: Icon, action, onClick }) => (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        {stats.map(({ label, value, icon: Icon, action, bg, iconBg, onClick }) => (
           <button
             key={label}
             onClick={onClick}
-            className="flex items-center gap-4 p-5 bg-white border border-neutral-200 rounded-lg text-left hover:bg-neutral-50 transition-colors"
+            className={`group flex items-center gap-5 p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg ${action ? "hover:shadow-black/20" : "hover:shadow-neutral-200 ring-1 ring-neutral-200"
+              } ${bg}`}
           >
-            <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-black/10 text-black">
-              <Icon size={24} strokeWidth={1.75} />
+            <div className={`flex items-center justify-center w-14 h-14 rounded-xl shrink-0 transition-transform duration-300 group-hover:scale-110 ${iconBg}`}>
+              <Icon size={24} strokeWidth={2} />
             </div>
             <div>
               {action ? (
-                <p className="font-medium text-black">{label}</p>
+                <>
+                  <p className="font-bold text-white text-lg tracking-tight">{label}</p>
+                  <p className="text-white/70 text-sm mt-1">Get AI assistance</p>
+                </>
               ) : (
                 <>
-                  <p className="text-2xl font-semibold text-black">{value}</p>
-                  <p className="text-sm text-neutral-500">{label}</p>
+                  <p className="text-3xl font-bold text-black tracking-tight mb-1">{value}</p>
+                  <p className="text-sm font-medium text-neutral-500">{label}</p>
                 </>
               )}
             </div>
@@ -91,23 +101,27 @@ function Dashboard() {
         ))}
       </div>
 
-      <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden">
-        <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
-          <h2 className="font-semibold text-black">Recent Complaints</h2>
+      <div className="bg-white border border-neutral-200 rounded-3xl overflow-hidden shadow-sm">
+        <div className="px-6 sm:px-8 py-6 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
+          <h2 className="text-lg font-bold text-black tracking-tight">Recent Complaints</h2>
           <button
             onClick={() => navigate("/complaints")}
-            className="text-sm font-medium text-black hover:text-neutral-600"
+            className="flex items-center gap-1 text-sm font-semibold text-neutral-500 hover:text-black transition-colors group"
           >
             View all
+            <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>
         <div className="divide-y divide-neutral-100">
           {recentComplaints.length === 0 ? (
-            <div className="px-6 py-8 text-center text-neutral-500 text-sm">
-              No complaints yet.{" "}
+            <div className="px-6 py-12 text-center">
+              <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FileText size={24} className="text-neutral-400" />
+              </div>
+              <p className="text-neutral-500 font-medium mb-3">No complaints yet.</p>
               <button
                 onClick={() => navigate("/file-complaint")}
-                className="text-black font-medium hover:underline"
+                className="text-black font-semibold hover:text-neutral-600 transition-colors"
               >
                 File one with AI
               </button>
@@ -116,29 +130,36 @@ function Dashboard() {
             recentComplaints.map(({ id, title, category, status, createdAt }) => (
               <div
                 key={id}
-                className="flex items-center justify-between px-6 py-4 hover:bg-neutral-50"
+                className="flex flex-col sm:flex-row sm:items-center justify-between px-6 sm:px-8 py-5 hover:bg-neutral-50 transition-colors cursor-pointer group"
+                onClick={() => navigate("/complaints")}
               >
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-black/5">
-                    <FileText size={20} className="text-black" />
+                <div className="flex items-center gap-5">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-neutral-100 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-neutral-200 transition-all shrink-0">
+                    <FileText size={22} className="text-black" />
                   </div>
                   <div>
-                    <p className="font-medium text-black">{title}</p>
-                    <p className="text-sm text-neutral-500 flex items-center gap-1">
-                      <Clock size={12} />
-                      {formatTimeAgo(createdAt)} · {category}
+                    <p className="font-bold text-black tracking-tight mb-1">{title}</p>
+                    <p className="text-sm text-neutral-500 flex items-center gap-2 font-medium">
+                      <span>{category}</span>
+                      <span className="w-1 h-1 rounded-full bg-neutral-300" />
+                      <span className="flex items-center gap-1.5"><Clock size={12} /> {formatTimeAgo(createdAt)}</span>
                     </p>
                   </div>
                 </div>
-                <span
-                  className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                    status === "Pending"
-                      ? "bg-black/10 text-black"
-                      : "bg-neutral-100 text-neutral-600"
-                  }`}
-                >
-                  {status}
-                </span>
+                <div className="mt-4 sm:mt-0 pl-17 sm:pl-0">
+                  <span
+                    className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase ${status?.toLowerCase() === "rejected"
+                        ? "bg-rose-100 text-rose-700"
+                        : status === "Pending" || !status
+                          ? "bg-neutral-100 text-neutral-700"
+                          : status === "Resolved"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-blue-100 text-blue-800"
+                      }`}
+                  >
+                    {status || "Pending"}
+                  </span>
+                </div>
               </div>
             ))
           )}

@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
-import { LayoutDashboard, PenLine, AlertTriangle, FileText, User, ExternalLink } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { LayoutDashboard, PenLine, AlertTriangle, FileText, User, ExternalLink, LogOut } from "lucide-react";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -9,64 +9,79 @@ const navItems = [
 ];
 
 function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("campuscare-role");
+    localStorage.removeItem("campuscare-userId");
+    navigate("/login");
+  };
+
   return (
-    <aside className="flex flex-col w-64 min-h-screen bg-white text-black border-r border-neutral-200 shrink-0">
-      <div className="flex flex-col flex-1 px-4 py-6">
+    <aside className="flex flex-col w-72 min-h-screen bg-[#fafafa] text-black border-r border-neutral-200/60 shrink-0 select-none">
+      <div className="flex flex-col flex-1 px-5 py-8">
         {/* Logo / Brand */}
-        <NavLink to="/" className="flex items-center gap-3 mb-8 px-2">
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-black/10 text-black">
-            <User size={22} strokeWidth={2} />
+        <NavLink to="/" className="flex items-center gap-4 mb-10 px-3 group">
+          <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-black text-white shadow-md shadow-black/10 transition-transform duration-300 group-hover:scale-105">
+            <User size={22} strokeWidth={2.5} />
           </div>
           <div>
-            <span className="font-semibold text-lg tracking-tight">CampusCare</span>
-            <p className="text-xs text-neutral-500">Student Portal</p>
+            <span className="font-bold text-xl tracking-tight leading-none block mb-1">CampusCare</span>
+            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">Student Portal</p>
           </div>
         </NavLink>
 
         {/* Navigation */}
-        <nav className="flex flex-col gap-1">
+        <nav className="flex flex-col gap-1.5">
           {navItems.map(({ to, icon: Icon, label }) => (
             <NavLink
               key={to}
               to={to}
               end={to === "/"}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-black/10 text-black"
-                    : "text-neutral-500 hover:bg-neutral-100 hover:text-black"
+                `flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 ${isActive
+                  ? "bg-white text-black shadow-sm ring-1 ring-neutral-200/60 translate-x-1"
+                  : "text-neutral-500 hover:text-black hover:bg-neutral-100/80 hover:translate-x-0.5"
                 }`
               }
             >
-              <Icon size={20} strokeWidth={1.75} className="shrink-0" />
+              <Icon size={20} strokeWidth={2} className="shrink-0" />
               {label}
             </NavLink>
           ))}
         </nav>
 
-        {/* Admin Portal (new tab) */}
-        <div className="mt-auto pt-6 border-t border-neutral-200 space-y-1">
+        {/* Bottom Section */}
+        <div className="mt-auto pt-8 border-t border-neutral-200/60 space-y-2">
+
           <a
             href="/admin"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-neutral-100 transition-colors text-sm font-medium text-neutral-600"
+            className="flex items-center gap-3 w-full px-4 py-3 rounded-xl hover:bg-neutral-100/80 transition-colors text-sm font-semibold text-neutral-500 hover:text-black group"
           >
-            <ExternalLink size={18} />
-            <span>Admin Portal</span>
+            <ExternalLink size={18} strokeWidth={2} className="group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+            <span>Open Admin Portal</span>
           </a>
-        </div>
-        {/* User Section */}
-        <div className="pt-2">
-          <button className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-neutral-100 transition-colors text-left">
-            <div className="flex items-center justify-center w-9 h-9 rounded-full bg-neutral-200 text-neutral-700 font-medium text-sm shrink-0">
+
+          {/* User Section */}
+          <div className="flex items-center gap-3 w-full px-3 py-3 rounded-xl bg-neutral-100/50 text-left mt-2">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-200 text-neutral-700 font-bold text-sm shrink-0 border-2 border-white shadow-sm">
               JD
             </div>
-            <div className="flex flex-col items-start min-w-0">
-              <span className="text-sm font-medium text-neutral-800 truncate w-full">John Doe</span>
-              <span className="text-xs text-neutral-500">Student</span>
+            <div className="flex flex-col items-start min-w-0 flex-1">
+              <span className="text-sm font-bold text-neutral-800 truncate w-full tracking-tight">John Doe</span>
+              <span className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest">Student</span>
             </div>
-          </button>
+
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-rose-100/80 text-neutral-400 hover:text-rose-600 transition-colors shrink-0"
+              title="Sign Out"
+            >
+              <LogOut size={18} strokeWidth={2} className="translate-x-0.5" />
+            </button>
+          </div>
         </div>
       </div>
     </aside>

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, Shield } from "lucide-react";
+import { User, Shield, Sparkles } from "lucide-react";
 
 const ROLE_KEY = "campuscare-role";
 const ID_KEY = "campuscare-userId";
@@ -9,6 +9,15 @@ function Login() {
   const navigate = useNavigate();
   const [role, setRole] = useState("student");
   const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    const existingRole = localStorage.getItem(ROLE_KEY);
+    if (existingRole === "admin") {
+      navigate("/admin", { replace: true });
+    } else if (existingRole === "student") {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,66 +33,66 @@ function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
-      <div className="w-full max-w-md bg-white border border-neutral-200 rounded-xl p-8 shadow-sm">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg bg-black/10 flex items-center justify-center text-black font-semibold">
-            CC
+      <div className="w-full max-w-[420px] bg-white border border-neutral-200/60 rounded-3xl p-8 sm:p-10 shadow-sm align-middle">
+        <div className="flex flex-col items-center text-center mb-10">
+          <div className="w-14 h-14 rounded-2xl bg-black flex items-center justify-center text-white mb-6 shadow-md shadow-black/10">
+            <Sparkles size={28} />
           </div>
-          <div>
-            <h1 className="text-xl font-semibold text-black">CampusCare</h1>
-            <p className="text-xs text-neutral-500">Choose how you want to sign in</p>
-          </div>
+          <h1 className="text-2xl font-bold text-black tracking-tight mb-2">CampusCare</h1>
+          <p className="text-sm font-medium text-neutral-500">Sign in to report and track issues</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-black mb-1">ID</label>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-black tracking-tight">University ID</label>
             <input
               type="text"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              placeholder="Student ID or Admin ID"
-              className="w-full px-4 py-2 border border-neutral-200 rounded-lg bg-white text-black placeholder-neutral-400"
+              placeholder="Enter your Student or Admin ID"
+              className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-black text-sm placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-neutral-300 transition-all font-medium"
               required
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-black mb-1">Sign in as</label>
-            <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-black tracking-tight flex justify-between">
+              Select Role
+            </label>
+            <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => setRole("student")}
-                className={`flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium ${
-                  role === "student"
-                    ? "border-black bg-black text-white"
-                    : "border-neutral-200 bg-white text-neutral-700"
-                }`}
+                className={`flex flex-col items-center justify-center gap-2 py-4 rounded-xl border-2 transition-all ${role === "student"
+                    ? "border-black bg-black text-white shadow-md shadow-black/10"
+                    : "border-neutral-100 bg-white text-neutral-500 hover:border-neutral-200 hover:bg-neutral-50"
+                  }`}
               >
-                <User size={16} />
-                Student
+                <User size={20} className={role === "student" ? "text-white" : "text-neutral-400"} />
+                <span className="text-sm font-bold">Student</span>
               </button>
               <button
                 type="button"
                 onClick={() => setRole("admin")}
-                className={`flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium ${
-                  role === "admin"
-                    ? "border-black bg-black text-white"
-                    : "border-neutral-200 bg-white text-neutral-700"
-                }`}
+                className={`flex flex-col items-center justify-center gap-2 py-4 rounded-xl border-2 transition-all ${role === "admin"
+                    ? "border-black bg-black text-white shadow-md shadow-black/10"
+                    : "border-neutral-100 bg-white text-neutral-500 hover:border-neutral-200 hover:bg-neutral-50"
+                  }`}
               >
-                <Shield size={16} />
-                Admin
+                <Shield size={20} className={role === "admin" ? "text-white" : "text-neutral-400"} />
+                <span className="text-sm font-bold">Admin</span>
               </button>
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="w-full mt-2 px-4 py-2 bg-black text-white rounded-lg font-medium hover:bg-neutral-800"
-          >
-            Continue
-          </button>
+          <div className="pt-2">
+            <button
+              type="submit"
+              className="w-full px-4 py-3.5 bg-black text-white rounded-xl font-bold hover:bg-neutral-800 hover:shadow-lg hover:shadow-black/10 transition-all active:scale-[0.98]"
+            >
+              Continue to Dashboard
+            </button>
+          </div>
         </form>
       </div>
     </div>
