@@ -12,6 +12,12 @@ import AdminLayout from "./admin/AdminLayout.jsx";
 import AdminDashboard from "./admin/AdminDashboard.jsx";
 import AdminComplaints from "./admin/AdminComplaints.jsx";
 import AdminEmergencies from "./admin/AdminEmergencies.jsx";
+import Events from "./pages/Events.jsx";
+import LostFound from "./pages/LostFound.jsx";
+import Facilities from "./pages/Facilities.jsx";
+import Cafeteria from "./pages/Cafeteria.jsx";
+import AdminEvents from "./admin/AdminEvents.jsx";
+import AdminLostFound from "./admin/AdminLostFound.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -23,11 +29,17 @@ createRoot(document.getElementById("root")).render(
           <Route path="file-complaint" element={<FileComplaint />} />
           <Route path="report-emergency" element={<ReportEmergency />} />
           <Route path="complaints" element={<MyComplaints />} />
+          <Route path="events" element={<Events />} />
+          <Route path="lostfound" element={<LostFound />} />
+          <Route path="facilities" element={<Facilities />} />
+          <Route path="cafeteria" element={<Cafeteria />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="complaints" element={<AdminComplaints />} />
           <Route path="emergencies" element={<AdminEmergencies />} />
+          <Route path="events" element={<AdminEvents />} />
+          <Route path="lostfound" element={<AdminLostFound />} />
         </Route>
       </Routes>
     </BrowserRouter>

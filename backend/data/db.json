@@ -1,0 +1,158 @@
+{
+  "complaints": [
+    {
+      "id": "comp_1",
+      "title": "Broken AC in Library 2nd Floor",
+      "category": "Maintenance",
+      "description": "The air conditioning unit in the silent study zone has been blowing hot air since yesterday morning. It's making it impossible to study during the heatwave.",
+      "status": "Under Review",
+      "photos": [],
+      "createdAt": "2026-03-18T05:04:22.658Z"
+    },
+    {
+      "id": "comp_2",
+      "title": "Faulty Projector in Lecture Hall C",
+      "category": "Infrastructure",
+      "description": "The HDMI cable for the ceiling projector is completely severed, and the color is distorted on the VGA port.",
+      "status": "Pending",
+      "photos": [],
+      "createdAt": "2026-03-19T03:04:22.667Z"
+    },
+    {
+      "id": "comp_3",
+      "title": "No hot water in Dorm Block A",
+      "category": "Maintenance",
+      "description": "There hasn't been any hot water in the showers on the 3rd floor for three days.",
+      "status": "In Progress",
+      "photos": [],
+      "createdAt": "2026-03-16T05:04:22.667Z"
+    },
+    {
+      "id": "comp_4",
+      "title": "Flickering lights in parking lot",
+      "category": "Safety",
+      "description": "Several street lights in the north parking structure are completely out or flickering, making it unsafe at night.",
+      "status": "Resolved",
+      "photos": [],
+      "createdAt": "2026-03-12T05:04:22.667Z"
+    }
+  ],
+  "emergencies": [
+    {
+      "id": "emerg_1",
+      "type": "Medical",
+      "location": "Gymnasium",
+      "description": "Student injured their ankle severely during basketball game, requires immediate medical support.",
+      "status": "Resolved",
+      "time": "2026-03-17T05:04:22.667Z",
+      "photos": [],
+      "reportedBy": "user"
+    },
+    {
+      "id": "emerg_2",
+      "type": "Security",
+      "location": "South Entrance",
+      "description": "Suspicious individual loitering around the bike racks with tools.",
+      "status": "Reported",
+      "time": "2026-03-19T04:49:22.667Z",
+      "photos": [],
+      "reportedBy": "user"
+    }
+  ],
+  "events": [
+    {
+      "id": "event_1",
+      "title": "Annual Tech Symposium 2026",
+      "date": "2026-03-24T05:04:22.667Z",
+      "location": "Main Auditorium",
+      "description": "Join us for 2 days of robotics, coding challenges, and tech talks from industry leaders.",
+      "type": "Academic",
+      "rsvps": 142
+    },
+    {
+      "id": "event_2",
+      "title": "Inter-College Basketball Finals",
+      "date": "2026-03-21T05:04:22.667Z",
+      "location": "Indoor Sports Complex",
+      "description": "Cheer for our team as they face off against the rival college in the grand finals!",
+      "type": "Sports",
+      "rsvps": 310
+    }
+  ],
+  "lostFound": [
+    {
+      "id": "lf_1",
+      "title": "Lost AirPods Pro",
+      "type": "Lost",
+      "category": "Electronics",
+      "description": "I lost my AirPods case with the right earbud inside near the Science Block cafe.",
+      "status": "Open",
+      "date": "2026-03-18T05:04:22.667Z"
+    },
+    {
+      "id": "lf_2",
+      "title": "Found Calculator",
+      "type": "Found",
+      "category": "Academic",
+      "description": "Found a Casio scientific calculator in Lecture Hall B. Handed over to security desk.",
+      "status": "Claimed",
+      "date": "2026-03-16T05:04:22.667Z"
+    }
+  ],
+  "facilities": [
+    {
+      "id": "fac_1",
+      "name": "Library Study Room A",
+      "type": "Study Room",
+      "capacity": 4,
+      "status": "Available",
+      "bookings": []
+    },
+    {
+      "id": "fac_2",
+      "name": "Main Auditorium",
+      "type": "Event Space",
+      "capacity": 500,
+      "status": "Booked",
+      "bookings": [
+        {
+          "timeSlot": "14:00 - 16:00",
+          "bookedBy": "Tech Club",
+          "date": "2026-03-19T05:04:22.667Z"
+        }
+      ]
+    },
+    {
+      "id": "fac_3",
+      "name": "Indoor Basketball Court",
+      "type": "Sports",
+      "capacity": 20,
+      "status": "Available",
+      "bookings": []
+    }
+  ],
+  "cafeteria": [
+    {
+      "id": "cafe_1",
+      "name": "Main Block Mess",
+      "crowdStatus": "High",
+      "menu": {
+        "breakfast": "Pancakes, Eggs, Oatmeal, Fresh Juice",
+        "lunch": "Grilled Chicken, Rice, Steamed Veggies, Pasta",
+        "dinner": "Pizza, Soup, Salad Bar, Dessert"
+      },
+      "updatedAt": "2026-03-19T05:04:22.667Z"
+    },
+    {
+      "id": "cafe_2",
+      "name": "Science Block Cafe",
+      "crowdStatus": "Low",
+      "menu": {
+        "breakfast": "Muffins, Coffee, Breakfast Sandwiches",
+        "lunch": "Sandwiches, Wraps, Iced Tea",
+        "dinner": "Closed"
+      },
+      "updatedAt": "2026-03-19T05:04:22.667Z"
+    }
+  ]
+}

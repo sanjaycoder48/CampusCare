@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { FileText, ImageIcon, Clock, Check, Eye, PenTool, X, Trash2 } from "lucide-react";
-
-const STORAGE_KEY = "campuscare-complaints";
+import { fetchComplaints, updateComplaintStatus, clearAllComplaints } from "../api";
 
 const TRACKER_STEPS = ["Pending", "Under Review", "In Progress", "Resolved", "Rejected"];
 
@@ -19,25 +18,17 @@ function AdminComplaints() {
   const [complaints, setComplaints] = useState([]);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      setComplaints(saved ? JSON.parse(saved) : []);
-    } catch {
-      setComplaints([]);
-    }
+    fetchComplaints().then(data => setComplaints(data));
   }, []);
 
-  const updateStatus = (id, newStatus) => {
-    setComplaints((prev) => {
-      const updated = prev.map((c) => (c.id === id ? { ...c, status: newStatus } : c));
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+  const updateStatus = async (id, newStatus) => {
+    await updateComplaintStatus(id, newStatus);
+    setComplaints((prev) => prev.map((c) => (c.id === id ? { ...c, status: newStatus } : c)));
   };
 
-  const handleClearHistory = () => {
+  const handleClearHistory = async () => {
     if (window.confirm("CRITICAL WARNING: Are you sure you want to permanently delete ALL student complaints from the database? This action cannot be undone.")) {
-      localStorage.removeItem(STORAGE_KEY);
+      await clearAllComplaints();
       setComplaints([]);
     }
   };

@@ -1,10 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, FileText, Activity, Shield, LogOut, ExternalLink } from "lucide-react";
+import { LayoutDashboard, FileText, Activity, Shield, LogOut, ExternalLink, Calendar, Package } from "lucide-react";
 
 const navItems = [
   { to: "/admin", icon: LayoutDashboard, label: "Overview", end: true },
   { to: "/admin/complaints", icon: FileText, label: "Complaints" },
   { to: "/admin/emergencies", icon: Activity, label: "Emergencies" },
+  { to: "/admin/events", icon: Calendar, label: "Manage Events" },
+  { to: "/admin/lostfound", icon: Package, label: "Lost & Found" },
 ];
 
 function AdminSidebar() {

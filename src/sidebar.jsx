@@ -1,11 +1,15 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, PenLine, AlertTriangle, FileText, User, ExternalLink, LogOut } from "lucide-react";
+import { LayoutDashboard, PenLine, AlertTriangle, FileText, User, ExternalLink, LogOut, Calendar, Package, DoorOpen, Coffee } from "lucide-react";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/file-complaint", icon: PenLine, label: "File Complaint" },
   { to: "/report-emergency", icon: AlertTriangle, label: "Report Emergency" },
   { to: "/complaints", icon: FileText, label: "My Complaints" },
+  { to: "/events", icon: Calendar, label: "Campus Events" },
+  { to: "/lostfound", icon: Package, label: "Lost & Found" },
+  { to: "/facilities", icon: DoorOpen, label: "Facility Booking" },
+  { to: "/cafeteria", icon: Coffee, label: "Cafeteria & Mess" },
 ];
 
 function Sidebar() {

@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FileText, AlertTriangle, PenTool } from "lucide-react";
-
-const COMPLAINTS_KEY = "campuscare-complaints";
-const EMERGENCIES_KEY = "campuscare-emergencies";
+import { fetchComplaints, fetchEmergencies } from "../api";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -11,13 +9,13 @@ function AdminDashboard() {
   const [emergencies, setEmergencies] = useState([]);
 
   useEffect(() => {
-    try {
-      setComplaints(JSON.parse(localStorage.getItem(COMPLAINTS_KEY) || "[]"));
-      setEmergencies(JSON.parse(localStorage.getItem(EMERGENCIES_KEY) || "[]"));
-    } catch {
-      setComplaints([]);
-      setEmergencies([]);
-    }
+    Promise.all([
+      fetchComplaints(),
+      fetchEmergencies()
+    ]).then(([complaintsData, emergenciesData]) => {
+      setComplaints(complaintsData);
+      setEmergencies(emergenciesData);
+    });
   }, []);
 
   const totalComplaints = complaints.length;

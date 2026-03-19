@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FileText, AlertTriangle, PenLine, Clock, ChevronRight } from "lucide-react";
-
-const COMPLAINTS_KEY = "campuscare-complaints";
-const EMERGENCIES_KEY = "campuscare-emergencies";
+import { fetchComplaints, fetchEmergencies } from "../api";
 
 function formatTimeAgo(dateStr) {
   if (!dateStr) return "Just now";
@@ -21,18 +19,13 @@ function Dashboard() {
   const [emergencies, setEmergencies] = useState([]);
 
   useEffect(() => {
-    const load = () => {
-      try {
-        setComplaints(JSON.parse(localStorage.getItem(COMPLAINTS_KEY) || "[]"));
-        setEmergencies(JSON.parse(localStorage.getItem(EMERGENCIES_KEY) || "[]"));
-      } catch {
-        setComplaints([]);
-        setEmergencies([]);
-      }
-    };
-    load();
-    window.addEventListener("storage", load);
-    return () => window.removeEventListener("storage", load);
+    Promise.all([
+      fetchComplaints(),
+      fetchEmergencies()
+    ]).then(([complaintsData, emergenciesData]) => {
+      setComplaints(complaintsData);
+      setEmergencies(emergenciesData);
+    });
   }, []);
 
   const myPendingComplaints = complaints.filter((c) => c.status === "Pending" || !c.status).length;

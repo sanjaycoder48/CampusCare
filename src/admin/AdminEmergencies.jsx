@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { AlertTriangle, ImageIcon, MapPin, Clock, Check, PenTool, Flame, Trash2 } from "lucide-react";
-
-const STORAGE_KEY = "campuscare-emergencies";
+import { fetchEmergencies, updateEmergencyStatus, clearAllEmergencies } from "../api";
 
 function formatTimeAgo(dateStr) {
   if (!dateStr) return "Just now";
@@ -17,25 +16,17 @@ function AdminEmergencies() {
   const [emergencies, setEmergencies] = useState([]);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      setEmergencies(saved ? JSON.parse(saved) : []);
-    } catch {
-      setEmergencies([]);
-    }
+    fetchEmergencies().then(data => setEmergencies(data));
   }, []);
 
-  const updateStatus = (id, newStatus) => {
-    setEmergencies((prev) => {
-      const updated = prev.map((e) => (e.id === id ? { ...e, status: newStatus } : e));
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+  const updateStatus = async (id, newStatus) => {
+    await updateEmergencyStatus(id, newStatus);
+    setEmergencies((prev) => prev.map((e) => (e.id === id ? { ...e, status: newStatus } : e)));
   };
 
-  const handleClearHistory = () => {
+  const handleClearHistory = async () => {
     if (window.confirm("CRITICAL WARNING: Are you sure you want to permanently delete ALL reported emergencies from the database? This action cannot be undone.")) {
-      localStorage.removeItem(STORAGE_KEY);
+      await clearAllEmergencies();
       setEmergencies([]);
     }
   };
@@ -168,7 +159,7 @@ function AdminEmergencies() {
 
                           {description && (
                             <div className="mt-5 p-4 bg-white rounded-xl border border-rose-100/50 shadow-sm">
-                              <p className="text-neutral-700 text-sm leading-relaxed whitespace-pre-line font-medium break-words">
+                              <p className="text-neutral-700 text-sm leading-relaxed whitespace-pre-line font-medium wrap-break-word">
                                 {description}
                               </p>
                             </div>

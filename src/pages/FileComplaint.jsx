@@ -1,8 +1,8 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Bot, Send, ImagePlus, X, Sparkles, AlertCircle } from "lucide-react";
+import { createComplaint } from "../api";
 
-const STORAGE_KEY = "campuscare-complaints";
 const MAX_PHOTOS = 5;
 const MAX_PHOTO_SIZE = 500 * 1024;
 
@@ -79,17 +79,15 @@ function FileComplaint() {
 
   const removePhoto = (index) => setPhotos((p) => p.filter((_, i) => i !== index));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     const newComplaint = {
-      id: Date.now(),
       ...form,
       photos: photos.map((p) => p.data),
       status: "Pending",
       createdAt: new Date().toISOString(),
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([newComplaint, ...saved]));
+    await createComplaint(newComplaint);
     navigate("/complaints");
   };
 

@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, FileText, ImageIcon, Trash2, Check, Clock } from "lucide-react";
-
-const STORAGE_KEY = "campuscare-complaints";
+import { fetchComplaints, clearAllComplaints } from "../api";
 
 const TRACKER_STEPS = ["Submitted", "Under Review", "In Progress", "Resolved"];
 
@@ -32,17 +31,12 @@ function MyComplaints() {
   const [complaints, setComplaints] = useState([]);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      setComplaints(saved ? JSON.parse(saved) : []);
-    } catch {
-      setComplaints([]);
-    }
+    fetchComplaints().then(data => setComplaints(data));
   }, []);
 
-  const handleClearHistory = () => {
+  const handleClearHistory = async () => {
     if (window.confirm("Are you sure you want to clear your complaint history?")) {
-      localStorage.removeItem(STORAGE_KEY);
+      await clearAllComplaints();
       setComplaints([]);
     }
   };

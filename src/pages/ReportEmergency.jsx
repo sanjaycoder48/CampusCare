@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertTriangle, ImagePlus, X, AlertCircle } from "lucide-react";
+import { createEmergency } from "../api";
 
-const STORAGE_KEY = "campuscare-emergencies";
 const MAX_PHOTOS = 3;
 const MAX_PHOTO_SIZE = 500 * 1024;
 
@@ -17,10 +17,7 @@ function ReportEmergency() {
   });
   const [photos, setPhotos] = useState([]);
 
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    setEmergencies(saved ? JSON.parse(saved) : []);
-  }, []);
+  // Removed local storage fetch for emergencies as they are not used on this page
 
   const handlePhotoAdd = (e) => {
     const files = Array.from(e.target.files || []);
@@ -47,18 +44,16 @@ function ReportEmergency() {
     setPhotos((p) => p.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newEmergency = {
-      id: Date.now(),
       ...form,
       photos: photos.map((p) => p.data),
       time: new Date().toISOString(),
       status: "Reported",
       reportedBy: "user",
     };
-    const updated = [newEmergency, ...emergencies];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    await createEmergency(newEmergency);
     navigate("/");
   };
 
