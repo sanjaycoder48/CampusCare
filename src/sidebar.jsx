@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, PenLine, AlertTriangle, FileText, User, ExternalLink, LogOut, Calendar, Package, DoorOpen, Coffee } from "lucide-react";
+import { LayoutDashboard, PenLine, AlertTriangle, FileText, User, ExternalLink, LogOut, Calendar, Package, DoorOpen, Coffee, X } from "lucide-react";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -12,7 +12,7 @@ const navItems = [
   { to: "/cafeteria", icon: Coffee, label: "Cafeteria & Mess" },
 ];
 
-function Sidebar() {
+function Sidebar({ onClose }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -22,18 +22,25 @@ function Sidebar() {
   };
 
   return (
-    <aside className="flex flex-col w-72 min-h-screen bg-[#fafafa] text-black border-r border-neutral-200/60 shrink-0 select-none">
+    <aside className="flex flex-col w-full sm:w-72 h-dvh md:h-screen bg-[#fafafa] text-black border-r border-neutral-200/60 shrink-0 select-none overflow-y-auto">
       <div className="flex flex-col flex-1 px-5 py-8">
         {/* Logo / Brand */}
-        <NavLink to="/" className="flex items-center gap-4 mb-10 px-3 group">
-          <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-black text-white shadow-md shadow-black/10 transition-transform duration-300 group-hover:scale-105">
-            <User size={22} strokeWidth={2.5} />
-          </div>
-          <div>
-            <span className="font-bold text-xl tracking-tight leading-none block mb-1">CampusCare</span>
-            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">Student Portal</p>
-          </div>
-        </NavLink>
+        <div className="flex items-center justify-between mb-10 px-3 group">
+          <NavLink to="/" onClick={onClose} className="flex items-center gap-4">
+            <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-black text-white shadow-md shadow-black/10 transition-transform duration-300 group-hover:scale-105">
+              <User size={22} strokeWidth={2.5} />
+            </div>
+            <div>
+              <span className="font-bold text-xl tracking-tight leading-none block mb-1">CampusCare</span>
+              <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">Student Portal</p>
+            </div>
+          </NavLink>
+          {onClose && (
+            <button onClick={onClose} className="p-2 md:hidden hover:bg-neutral-200/60 rounded-xl text-neutral-500 hover:text-black transition-colors" aria-label="Close menu">
+              <X size={20} strokeWidth={2.5} />
+            </button>
+          )}
+        </div>
 
         {/* Navigation */}
         <nav className="flex flex-col gap-1.5">
@@ -41,6 +48,7 @@ function Sidebar() {
             <NavLink
               key={to}
               to={to}
+              onClick={onClose}
               end={to === "/"}
               className={({ isActive }) =>
                 `flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 ${isActive
