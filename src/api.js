@@ -197,6 +197,32 @@ export const bookFacility = async (id, timeSlot) => {
   }
 };
 
+export const updateFacilityStatus = async (id, status) => {
+  try {
+    const res = await fetch(`${API_URL}/facilities/update/${id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status })
+    });
+    return await res.json();
+  } catch (err) {
+    console.error('Error updating facility status:', err);
+    return null;
+  }
+};
+
+export const clearFacilityBookings = async (id) => {
+  try {
+    const res = await fetch(`${API_URL}/facilities/clear-bookings/${id}`, {
+      method: 'POST'
+    });
+    return await res.json();
+  } catch (err) {
+    console.error('Error clearing facility bookings:', err);
+    return null;
+  }
+};
+
 // CAFETERIA API
 export const fetchCafeteria = async () => {
   try {
@@ -205,5 +231,19 @@ export const fetchCafeteria = async () => {
   } catch (err) {
     console.error('Error fetching cafeteria:', err);
     return [];
+  }
+};
+
+export const updateCafeteriaData = async (id, data) => {
+  try {
+    const res = await fetch(`${API_URL}/cafeteria/update/${id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  } catch (err) {
+    console.error('Error updating cafeteria data:', err);
+    return null;
   }
 };

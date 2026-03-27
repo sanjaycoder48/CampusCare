@@ -19,6 +19,8 @@ import Facilities from "./pages/Facilities.jsx";
 import Cafeteria from "./pages/Cafeteria.jsx";
 import AdminEvents from "./admin/AdminEvents.jsx";
 import AdminLostFound from "./admin/AdminLostFound.jsx";
+import AdminFacilities from "./admin/AdminFacilities.jsx";
+import AdminCafeteria from "./admin/AdminCafeteria.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -41,6 +43,8 @@ createRoot(document.getElementById("root")).render(
           <Route path="emergencies" element={<AdminEmergencies />} />
           <Route path="events" element={<AdminEvents />} />
           <Route path="lostfound" element={<AdminLostFound />} />
+          <Route path="facilities" element={<AdminFacilities />} />
+          <Route path="cafeteria" element={<AdminCafeteria />} />
         </Route>
       </Routes>
     </BrowserRouter>

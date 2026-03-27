@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, FileText, Activity, Shield, LogOut, ExternalLink, Calendar, Package, X } from "lucide-react";
+import { LayoutDashboard, FileText, Activity, Shield, LogOut, ExternalLink, Calendar, Package, X, DoorOpen, Coffee } from "lucide-react";
 
 const navItems = [
   { to: "/admin", icon: LayoutDashboard, label: "Overview", end: true },
@@ -7,6 +7,8 @@ const navItems = [
   { to: "/admin/emergencies", icon: Activity, label: "Emergencies" },
   { to: "/admin/events", icon: Calendar, label: "Manage Events" },
   { to: "/admin/lostfound", icon: Package, label: "Lost & Found" },
+  { to: "/admin/facilities", icon: DoorOpen, label: "Manage Facilities" },
+  { to: "/admin/cafeteria", icon: Coffee, label: "Cafeteria & Mess" },
 ];
 
 function AdminSidebar({ onClose }) {
@@ -62,16 +64,6 @@ function AdminSidebar({ onClose }) {
 
         {/* Bottom Section */}
         <div className="mt-auto pt-8 border-t border-neutral-200/60 space-y-2">
-          <a
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-3 w-full px-4 py-3 rounded-xl hover:bg-neutral-100/80 transition-colors text-sm font-semibold text-neutral-500 hover:text-black group"
-          >
-            <ExternalLink size={18} strokeWidth={2} className="group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
-            <span>Open Student Portal</span>
-          </a>
-
           {/* User Section */}
           <div className="flex items-center gap-3 w-full px-3 py-3 rounded-xl bg-neutral-100/50 text-left mt-2">
             <div className="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-200 text-neutral-700 font-bold text-sm shrink-0 border-2 border-white shadow-sm">

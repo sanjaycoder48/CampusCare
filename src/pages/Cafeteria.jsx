@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchCafeteria } from "../api";
-import { Coffee, Utensils, Pizza, Activity } from "lucide-react";
+import { Coffee, Utensils, Pizza, Activity, Calendar } from "lucide-react";
 
 function Cafeteria() {
   const [cafes, setCafes] = useState([]);
@@ -57,6 +57,23 @@ function Cafeteria() {
                   <p className="text-neutral-600 leading-relaxed font-medium">{cafe.menu.dinner}</p>
                </div>
             </div>
+
+            {cafe.events?.length > 0 && (
+              <div className="bg-emerald-50/50 p-6 sm:p-8 border-t border-emerald-100">
+                <div className="flex items-center gap-2 text-sm font-bold text-emerald-800 mb-4 uppercase tracking-wide">
+                  <Calendar size={18} className="text-emerald-600" /> Special Events
+                </div>
+                <div className="space-y-3">
+                  {cafe.events.map(ev => (
+                    <div key={ev.id} className="flex justify-between items-center bg-white border border-emerald-100 p-3 rounded-xl shadow-sm">
+                      <span className="font-bold text-sm text-black">{ev.title}</span>
+                      <span className="text-xs font-bold text-emerald-600 bg-emerald-100 px-2 py-1 rounded-md">{new Date(ev.date).toLocaleDateString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
           </div>
         ))}
       </div>
