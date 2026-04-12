@@ -1,13 +1,15 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { mockData } from './mockData';
 
 // COMPLAINTS API
 export const fetchComplaints = async () => {
   try {
     const res = await fetch(`${API_URL}/complaints`);
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error fetching complaints:', err);
-    return [];
+    return mockData.complaints;
   }
 };
 
@@ -18,10 +20,13 @@ export const createComplaint = async (data) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error creating complaint:', err);
-    return null;
+    const newComplaint = { id: `comp_${Date.now()}`, status: 'Pending', createdAt: new Date().toISOString(), ...data };
+    mockData.complaints.unshift(newComplaint);
+    return newComplaint;
   }
 };
 
@@ -32,9 +37,13 @@ export const updateComplaintStatus = async (id, status) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error updating complaint status:', err);
+    const index = mockData.complaints.findIndex(c => c.id === id);
+    if (index !== -1) mockData.complaints[index].status = status;
+    return mockData.complaints[index];
   }
 };
 
@@ -43,6 +52,7 @@ export const clearAllComplaints = async () => {
     await fetch(`${API_URL}/complaints/clear`, { method: 'DELETE' });
   } catch (err) {
     console.error('Error clearing complaints:', err);
+    mockData.complaints = [];
   }
 };
 
@@ -50,10 +60,11 @@ export const clearAllComplaints = async () => {
 export const fetchEmergencies = async () => {
   try {
     const res = await fetch(`${API_URL}/emergencies`);
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error fetching emergencies:', err);
-    return [];
+    return mockData.emergencies;
   }
 };
 
@@ -64,10 +75,13 @@ export const createEmergency = async (data) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error creating emergency:', err);
-    return null;
+    const newEmergency = { id: `emerg_${Date.now()}`, status: 'Reported', time: new Date().toISOString(), ...data };
+    mockData.emergencies.unshift(newEmergency);
+    return newEmergency;
   }
 };
 
@@ -78,9 +92,13 @@ export const updateEmergencyStatus = async (id, status) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error updating emergency status:', err);
+    const index = mockData.emergencies.findIndex(e => e.id === id);
+    if (index !== -1) mockData.emergencies[index].status = status;
+    return mockData.emergencies[index];
   }
 };
 
@@ -89,6 +107,7 @@ export const clearAllEmergencies = async () => {
     await fetch(`${API_URL}/emergencies/clear`, { method: 'DELETE' });
   } catch (err) {
     console.error('Error clearing emergencies:', err);
+    mockData.emergencies = [];
   }
 };
 
@@ -96,10 +115,11 @@ export const clearAllEmergencies = async () => {
 export const fetchEvents = async () => {
   try {
     const res = await fetch(`${API_URL}/events`);
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error fetching events:', err);
-    return [];
+    return mockData.events;
   }
 };
 
@@ -110,19 +130,26 @@ export const createEvent = async (data) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error creating event:', err);
-    return null;
+    const newEvent = { id: `event_${Date.now()}`, rsvps: 0, ...data };
+    mockData.events.push(newEvent);
+    return newEvent;
   }
 };
 
 export const rsvpEvent = async (id) => {
   try {
     const res = await fetch(`${API_URL}/events/rsvp/${id}`, { method: 'POST' });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error RSVPing to event:', err);
+    const index = mockData.events.findIndex(e => e.id === id);
+    if (index !== -1) mockData.events[index].rsvps += 1;
+    return mockData.events[index];
   }
 };
 
@@ -131,6 +158,7 @@ export const deleteEvent = async (id) => {
     await fetch(`${API_URL}/events/delete/${id}`, { method: 'DELETE' });
   } catch (err) {
     console.error('Error deleting event:', err);
+    mockData.events = mockData.events.filter(e => e.id !== id);
   }
 };
 
@@ -138,10 +166,11 @@ export const deleteEvent = async (id) => {
 export const fetchLostFound = async () => {
   try {
     const res = await fetch(`${API_URL}/lostfound`);
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error fetching lost & found:', err);
-    return [];
+    return mockData.lostFound;
   }
 };
 
@@ -152,10 +181,13 @@ export const createLostFound = async (data) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error creating lost/found item:', err);
-    return null;
+    const newItem = { id: `lf_${Date.now()}`, status: 'Open', date: new Date().toISOString(), ...data };
+    mockData.lostFound.unshift(newItem);
+    return newItem;
   }
 };
 
@@ -166,9 +198,13 @@ export const updateLostFoundStatus = async (id, status) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error updating lost/found status:', err);
+    const index = mockData.lostFound.findIndex(l => l.id === id);
+    if (index !== -1) mockData.lostFound[index].status = status;
+    return mockData.lostFound[index];
   }
 };
 
@@ -176,10 +212,11 @@ export const updateLostFoundStatus = async (id, status) => {
 export const fetchFacilities = async () => {
   try {
     const res = await fetch(`${API_URL}/facilities`);
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error fetching facilities:', err);
-    return [];
+    return mockData.facilities;
   }
 };
 
@@ -190,10 +227,16 @@ export const bookFacility = async (id, timeSlot) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ timeSlot })
     });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error booking facility:', err);
-    return null;
+    const fac = mockData.facilities.find(f => f.id === id);
+    if (fac) {
+      fac.bookings = fac.bookings || [];
+      fac.bookings.push({ timeSlot, bookedBy: 'Demo User', date: new Date().toISOString() });
+    }
+    return fac;
   }
 };
 
@@ -204,10 +247,13 @@ export const updateFacilityStatus = async (id, status) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status })
     });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error updating facility status:', err);
-    return null;
+    const fac = mockData.facilities.find(f => f.id === id);
+    if (fac) fac.status = status;
+    return fac;
   }
 };
 
@@ -216,10 +262,13 @@ export const clearFacilityBookings = async (id) => {
     const res = await fetch(`${API_URL}/facilities/clear-bookings/${id}`, {
       method: 'POST'
     });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error clearing facility bookings:', err);
-    return null;
+    const fac = mockData.facilities.find(f => f.id === id);
+    if (fac) fac.bookings = [];
+    return fac;
   }
 };
 
@@ -227,10 +276,11 @@ export const clearFacilityBookings = async (id) => {
 export const fetchCafeteria = async () => {
   try {
     const res = await fetch(`${API_URL}/cafeteria`);
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error fetching cafeteria:', err);
-    return [];
+    return mockData.cafeteria;
   }
 };
 
@@ -241,9 +291,15 @@ export const updateCafeteriaData = async (id, data) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
+    if (!res.ok) throw new Error('Network response was not ok');
     return await res.json();
   } catch (err) {
     console.error('Error updating cafeteria data:', err);
+    const index = mockData.cafeteria.findIndex(c => c.id === id);
+    if (index !== -1) {
+      mockData.cafeteria[index] = { ...mockData.cafeteria[index], ...data };
+      return mockData.cafeteria[index];
+    }
     return null;
   }
 };
