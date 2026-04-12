@@ -104,7 +104,7 @@ function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        {stats.map(({ label, value, icon: Icon, action, bg, iconBg, onClick }) => (
+        {stats.map(({ label, value, icon: Icon, action, bg, iconBg, onClick, actionText }) => (
           <button
             key={label}
             onClick={onClick}

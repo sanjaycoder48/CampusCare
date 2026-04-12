@@ -5,14 +5,14 @@ import { DoorOpen, CheckCircle, XCircle, Trash2, ShieldAlert } from "lucide-reac
 function AdminFacilities() {
   const [facilities, setFacilities] = useState([]);
 
-  useEffect(() => {
-    loadFacilities();
-  }, []);
-
   const loadFacilities = async () => {
     const data = await fetchFacilities();
     setFacilities(data);
   };
+
+  useEffect(() => {
+    loadFacilities();
+  }, []);
 
   const handleStatusChange = async (id, newStatus) => {
     const updated = await updateFacilityStatus(id, newStatus);
