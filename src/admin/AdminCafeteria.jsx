@@ -7,14 +7,14 @@ function AdminCafeteria() {
   const [activeEventForm, setActiveEventForm] = useState(null);
   const [eventForm, setEventForm] = useState({ title: "", date: "" });
 
-  useEffect(() => {
-    loadCafeterias();
-  }, []);
-
   const loadCafeterias = async () => {
     const data = await fetchCafeteria();
     setCafeterias(data);
   };
+
+  useEffect(() => {
+    loadCafeterias();
+  }, []);
 
   const handleUpdate = async (id, field, value) => {
     const dataToUpdate = {};
