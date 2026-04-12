@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileText, AlertTriangle, PenTool } from "lucide-react";
+import { FileText, AlertTriangle, PenTool, Calendar, DoorOpen, Coffee, Package } from "lucide-react";
 import { fetchComplaints, fetchEmergencies } from "../api";
 
 function AdminDashboard() {
@@ -73,6 +73,61 @@ function AdminDashboard() {
               <p className="text-4xl font-bold text-black tracking-tight mb-1">{totalEmergencies}</p>
               <p className="text-sm font-semibold text-neutral-500 uppercase tracking-wider">Reported Emergencies</p>
             </div>
+          </div>
+        </button>
+      </div>
+
+      <h2 className="text-xl sm:text-2xl font-bold text-black tracking-tight mb-6">Management Sections</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <button
+          onClick={() => navigate("/admin/events")}
+          className="group flex items-center gap-4 p-5 bg-white border border-neutral-200/60 rounded-2xl text-left hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/10 transition-all duration-300"
+        >
+          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300 shrink-0">
+            <Calendar size={22} strokeWidth={2} />
+          </div>
+          <div>
+            <p className="font-bold text-black tracking-tight leading-tight">Manage Events</p>
+            <p className="text-xs font-semibold text-neutral-500 mt-0.5">Schedule & update</p>
+          </div>
+        </button>
+
+        <button
+          onClick={() => navigate("/admin/facilities")}
+          className="group flex items-center gap-4 p-5 bg-white border border-neutral-200/60 rounded-2xl text-left hover:border-cyan-200 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300"
+        >
+          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 group-hover:scale-110 group-hover:bg-cyan-600 group-hover:text-white transition-all duration-300 shrink-0">
+            <DoorOpen size={22} strokeWidth={2} />
+          </div>
+          <div>
+            <p className="font-bold text-black tracking-tight leading-tight">Manage Facilities</p>
+            <p className="text-xs font-semibold text-neutral-500 mt-0.5">Bookings & status</p>
+          </div>
+        </button>
+
+        <button
+          onClick={() => navigate("/admin/cafeteria")}
+          className="group flex items-center gap-4 p-5 bg-white border border-neutral-200/60 rounded-2xl text-left hover:border-orange-200 hover:shadow-lg hover:shadow-orange-500/10 transition-all duration-300"
+        >
+          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-orange-50 text-orange-600 group-hover:scale-110 group-hover:bg-orange-600 group-hover:text-white transition-all duration-300 shrink-0">
+            <Coffee size={22} strokeWidth={2} />
+          </div>
+          <div>
+            <p className="font-bold text-black tracking-tight leading-tight">Cafeteria & Mess</p>
+            <p className="text-xs font-semibold text-neutral-500 mt-0.5">Menu & dining</p>
+          </div>
+        </button>
+
+        <button
+          onClick={() => navigate("/admin/lostfound")}
+          className="group flex items-center gap-4 p-5 bg-white border border-neutral-200/60 rounded-2xl text-left hover:border-amber-200 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-300"
+        >
+          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-amber-50 text-amber-600 group-hover:scale-110 group-hover:bg-amber-600 group-hover:text-white transition-all duration-300 shrink-0">
+            <Package size={22} strokeWidth={2} />
+          </div>
+          <div>
+            <p className="font-bold text-black tracking-tight leading-tight">Lost & Found</p>
+            <p className="text-xs font-semibold text-neutral-500 mt-0.5">Manage items</p>
           </div>
         </button>
       </div>

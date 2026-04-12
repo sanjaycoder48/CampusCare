@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileText, AlertTriangle, PenLine, Clock, ChevronRight } from "lucide-react";
+import { FileText, AlertTriangle, PenLine, Clock, ChevronRight, Calendar, Package, DoorOpen, Coffee } from "lucide-react";
 import { fetchComplaints, fetchEmergencies } from "../api";
 
 function formatTimeAgo(dateStr) {
@@ -50,11 +50,48 @@ function Dashboard() {
       iconBg: "bg-white border border-rose-100 shadow-sm text-rose-600"
     },
     {
+      label: "Campus Events",
+      icon: Calendar,
+      action: true,
+      actionText: "View schedule",
+      onClick: () => navigate("/events"),
+      bg: "bg-indigo-50",
+      iconBg: "bg-white border border-indigo-200 shadow-sm text-indigo-600"
+    },
+    {
+      label: "Facility Booking",
+      icon: DoorOpen,
+      action: true,
+      actionText: "Reserve spaces",
+      onClick: () => navigate("/facilities"),
+      bg: "bg-cyan-50",
+      iconBg: "bg-white border border-cyan-200 shadow-sm text-cyan-600"
+    },
+    {
+      label: "Cafeteria & Mess",
+      icon: Coffee,
+      action: true,
+      actionText: "View today's menu",
+      onClick: () => navigate("/cafeteria"),
+      bg: "bg-orange-50",
+      iconBg: "bg-white border border-orange-200 shadow-sm text-orange-600"
+    },
+    {
+      label: "Lost & Found",
+      icon: Package,
+      action: true,
+      actionText: "Report or retrieve",
+      onClick: () => navigate("/lostfound"),
+      bg: "bg-amber-50",
+      iconBg: "bg-white border border-amber-200 shadow-sm text-amber-600"
+    },
+    {
       label: "File New Complaint",
       icon: PenLine,
       action: true,
+      actionText: "Get AI assistance",
       onClick: () => navigate("/file-complaint"),
-      bg: "bg-black",
+      bg: "bg-black md:col-span-2 lg:col-span-1",
       iconBg: "bg-white/10 text-white"
     },
   ];
@@ -80,8 +117,8 @@ function Dashboard() {
             <div>
               {action ? (
                 <>
-                  <p className="font-bold text-white text-lg tracking-tight">{label}</p>
-                  <p className="text-white/70 text-sm mt-1">Get AI assistance</p>
+                  <p className={`font-bold ${bg.includes("bg-black") ? "text-white" : "text-black"} text-lg tracking-tight`}>{label}</p>
+                  <p className={`${bg.includes("bg-black") ? "text-white/70" : "text-neutral-500"} text-sm mt-1`}>{actionText}</p>
                 </>
               ) : (
                 <>
