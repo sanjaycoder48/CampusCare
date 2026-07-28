@@ -1,25 +1,22 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react";
 import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
 import Sidebar from "./sidebar.jsx";
 
 function App() {
   const navigate = useNavigate();
-  const [isAuthorized, setIsAuthorized] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const role = typeof window !== "undefined" ? localStorage.getItem("campuscare-role") : null;
 
   useEffect(() => {
-    const role = localStorage.getItem("campuscare-role");
     if (!role) {
       navigate("/login", { replace: true });
     } else if (role === "admin") {
       navigate("/admin", { replace: true });
-    } else {
-      setIsAuthorized(true);
     }
-  }, [navigate]);
+  }, [role, navigate]);
 
-  if (!isAuthorized) {
+  if (!role || role === "admin") {
     return null;
   }
 

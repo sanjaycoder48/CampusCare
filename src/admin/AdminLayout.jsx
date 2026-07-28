@@ -1,25 +1,22 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react";
 import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
 import AdminSidebar from "./AdminSidebar.jsx";
 
 function AdminLayout() {
   const navigate = useNavigate();
-  const [isAuthorized, setIsAuthorized] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const role = typeof window !== "undefined" ? localStorage.getItem("campuscare-role") : null;
 
   useEffect(() => {
-    const role = localStorage.getItem("campuscare-role");
     if (!role) {
       navigate("/login", { replace: true });
     } else if (role === "student") {
       navigate("/", { replace: true });
-    } else {
-      setIsAuthorized(true);
     }
-  }, [navigate]);
+  }, [role, navigate]);
 
-  if (!isAuthorized) {
+  if (!role || role === "student") {
     return null;
   }
 

@@ -1,253 +1,400 @@
-import { useState, useEffect } from "react";
-import { FileText, ImageIcon, Clock, Check, Eye, PenTool, X, Trash2 } from "lucide-react";
-import { fetchComplaints, updateComplaintStatus, clearAllComplaints } from "../api";
+import React, { useEffect, useState } from "react";
+import {
+  Search,
+  Download,
+  BarChart3,
+  Trash2
+} from "lucide-react";
+import { fetchComplaints, updateComplaintStatus, clearAllComplaints } from "../api.js";
+import StatusBadge from "../components/StatusBadge.jsx";
+import Toast from "../components/Toast.jsx";
+import Modal from "../components/Modal.jsx";
 
-const TRACKER_STEPS = ["Pending", "Under Review", "In Progress", "Resolved", "Rejected"];
+const DEPARTMENTS = [
+  "All",
+  "Maintenance",
+  "Electrical",
+  "Plumbing",
+  "IT Support",
+  "Hostel",
+  "Cafeteria",
+  "Library",
+  "Transport",
+  "Security",
+  "Academic"
+];
 
-function formatTimeAgo(dateStr) {
-  if (!dateStr) return "Just now";
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  const hrs = Math.floor(diff / 3600000);
-  if (mins < 60) return `${mins || 1} mins ago`;
-  if (hrs < 24) return `${hrs} hrs ago`;
-  return `${Math.floor(hrs / 24)} days ago`;
-}
-
-function AdminComplaints() {
+export default function AdminComplaints() {
   const [complaints, setComplaints] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Filters
+  const [deptFilter, setDeptFilter] = useState("All");
+  const [priorityFilter, setPriorityFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Edit Modal State
+  const [selectedComplaint, setSelectedComplaint] = useState(null);
+  const [editForm, setEditForm] = useState({
+    status: "",
+    assignedTo: "",
+    eta: "",
+    adminRemarks: "",
+    comment: ""
+  });
+
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
-    fetchComplaints().then(data => setComplaints(data));
+    let isMounted = true;
+    fetchComplaints().then((data) => {
+      if (isMounted) {
+        setComplaints(data || []);
+        setLoading(false);
+      }
+    });
+    return () => { isMounted = false; };
   }, []);
 
-  const updateStatus = async (id, newStatus) => {
-    await updateComplaintStatus(id, newStatus);
-    setComplaints((prev) => prev.map((c) => (c.id === id ? { ...c, status: newStatus } : c)));
+  const showToast = (type, message) => {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 4000);
   };
 
-  const handleClearHistory = async () => {
-    if (window.confirm("CRITICAL WARNING: Are you sure you want to permanently delete ALL student complaints from the database? This action cannot be undone.")) {
-      await clearAllComplaints();
-      setComplaints([]);
+  const openEditModal = (comp) => {
+    setSelectedComplaint(comp);
+    setEditForm({
+      status: comp.status,
+      assignedTo: comp.assignedTo || "",
+      eta: comp.eta ? comp.eta.split("T")[0] : "",
+      adminRemarks: comp.adminRemarks || "",
+      comment: ""
+    });
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (!selectedComplaint) return;
+
+    const payload = {
+      status: editForm.status,
+      assignedTo: editForm.assignedTo,
+      eta: editForm.eta ? new Date(editForm.eta).toISOString() : "",
+      adminRemarks: editForm.adminRemarks,
+      comment: editForm.comment || `Updated status to ${editForm.status}`,
+      author: "Admin"
+    };
+
+    const updated = await updateComplaintStatus(selectedComplaint.id, payload);
+    if (updated) {
+      setComplaints(complaints.map(c => (c.id === selectedComplaint.id ? updated : c)));
+      setSelectedComplaint(null);
+      showToast("success", "Complaint updated successfully!");
     }
   };
 
-  const pendingCount = complaints.filter(c => c.status === "Pending" || !c.status).length;
-  const inProgressCount = complaints.filter(c => c.status === "Under Review" || c.status === "In Progress").length;
-  const resolvedCount = complaints.filter(c => c.status === "Resolved").length;
+  const handleExportCSV = () => {
+    if (complaints.length === 0) return;
+
+    const headers = ["ID", "Title", "Category", "Priority", "Status", "Location", "AssignedTo", "CreatedDate"];
+    const rows = complaints.map(c => [
+      c.id,
+      `"${(c.title || "").replace(/"/g, '""')}"`,
+      c.category,
+      c.priority || "Medium",
+      c.status,
+      `"${(c.location || "").replace(/"/g, '""')}"`,
+      `"${(c.assignedTo || "").replace(/"/g, '""')}"`,
+      c.createdAt || ""
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `campuscare_complaints_${new Date().toISOString().split("T")[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast("success", "Complaints report exported as CSV.");
+  };
+
+  const handleClearAll = async () => {
+    if (confirm("Are you sure you want to clear ALL complaints?")) {
+      await clearAllComplaints();
+      setComplaints([]);
+      showToast("info", "All complaints cleared.");
+    }
+  };
+
+  // Analytics Metrics
+  const totalCount = complaints.length;
+  const pendingCount = complaints.filter(c => c.status === "Submitted" || c.status === "Pending").length;
+  const inProgressCount = complaints.filter(c => c.status === "In Progress" || c.status === "Assigned" || c.status === "Under Review").length;
+  const resolvedCount = complaints.filter(c => c.status === "Resolved" || c.status === "Closed").length;
+
+  const filteredComplaints = complaints.filter(c => {
+    const matchesDept = deptFilter === "All" || c.category === deptFilter;
+    const matchesPriority = priorityFilter === "All" || c.priority === priorityFilter;
+    const matchesStatus = statusFilter === "All" || c.status === statusFilter;
+    const matchesSearch =
+      (c.title || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (c.location || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (c.assignedTo || "").toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesDept && matchesPriority && matchesStatus && matchesSearch;
+  });
 
   return (
-    <div className="p-4 sm:p-8 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-10">
+    <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-8">
+      <Toast toast={toast} onClose={() => setToast(null)} />
+
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">Complaint Management</h1>
-          <p className="text-sm sm:text-base text-neutral-500 mt-2">
-            Review, update status, and manage student issue reports
+          <h1 className="text-3xl font-bold text-neutral-900 tracking-tight flex items-center gap-3">
+            <BarChart3 className="w-8 h-8 text-indigo-600" />
+            Admin Complaint Operations & Analytics
+          </h1>
+          <p className="text-neutral-500 mt-1">
+            Assign staff leads, set resolution ETAs, review department metrics, and export compliance reports.
           </p>
         </div>
 
-        {complaints.length > 0 && (
+        <div className="flex items-center gap-2">
           <button
-            onClick={handleClearHistory}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-rose-600 border border-neutral-200 rounded-xl font-medium hover:bg-rose-50 hover:border-rose-200 transition-all duration-200 shadow-sm shrink-0"
+            onClick={handleExportCSV}
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-1.5"
           >
-            <Trash2 size={18} />
-            <span>Clear All Database</span>
+            <Download className="w-4 h-4" /> Export Report (CSV)
           </button>
-        )}
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm flex items-center gap-5">
-          <div className="w-14 h-14 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
-            <FileText size={24} strokeWidth={2.2} />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-1">New / Pending</p>
-            <p className="text-3xl font-bold text-black tracking-tight">{pendingCount}</p>
-          </div>
-        </div>
-        <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm flex items-center gap-5">
-          <div className="w-14 h-14 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-            <PenTool size={24} strokeWidth={2.2} />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-1">In Progress</p>
-            <p className="text-3xl font-bold text-black tracking-tight">{inProgressCount}</p>
-          </div>
-        </div>
-        <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm flex items-center gap-5">
-          <div className="w-14 h-14 rounded-xl bg-green-50 text-green-600 flex items-center justify-center shrink-0">
-            <Check size={24} strokeWidth={2.2} />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-1">Resolved</p>
-            <p className="text-3xl font-bold text-black tracking-tight">{resolvedCount}</p>
-          </div>
+          <button
+            onClick={handleClearAll}
+            className="px-3 py-2 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-xl text-xs font-semibold"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
-      <div className="bg-white border border-neutral-200 rounded-3xl overflow-hidden shadow-sm">
-        <div className="px-6 sm:px-8 py-5 border-b border-neutral-100 bg-neutral-50/50 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-black tracking-tight">Active Complaint Register</h2>
-          <span className="text-xs font-semibold text-neutral-500 bg-white px-3 py-1 rounded-full border border-neutral-200 shadow-sm">
-            {complaints.length} Total
-          </span>
+      {/* Analytics Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-xs">
+          <span className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Total Complaints</span>
+          <div className="text-2xl font-bold text-neutral-900 mt-1">{totalCount}</div>
+        </div>
+        <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-xs">
+          <span className="text-xs font-semibold text-amber-600 uppercase tracking-wider">Submitted / Pending</span>
+          <div className="text-2xl font-bold text-amber-700 mt-1">{pendingCount}</div>
+        </div>
+        <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-xs">
+          <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wider">In Progress / Assigned</span>
+          <div className="text-2xl font-bold text-indigo-700 mt-1">{inProgressCount}</div>
+        </div>
+        <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-xs">
+          <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Resolved / Closed</span>
+          <div className="text-2xl font-bold text-emerald-700 mt-1">{resolvedCount}</div>
+        </div>
+      </div>
+
+      {/* Search & Filters */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white p-4 rounded-2xl border border-neutral-200 shadow-xs">
+        <div className="relative md:col-span-1">
+          <Search className="w-4 h-4 absolute left-3.5 top-3 text-neutral-400" />
+          <input
+            type="text"
+            placeholder="Search title, staff..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 bg-neutral-50 rounded-xl text-sm border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+          />
         </div>
 
-        <div className="divide-y divide-neutral-100">
-          {complaints.length === 0 ? (
-            <div className="px-6 py-16 text-center">
-              <div className="w-20 h-20 bg-neutral-50 rounded-full flex items-center justify-center mx-auto mb-5">
-                <Check size={32} className="text-green-500" />
+        <div>
+          <select
+            value={deptFilter}
+            onChange={e => setDeptFilter(e.target.value)}
+            className="w-full py-2 px-3 bg-neutral-50 rounded-xl text-sm border border-neutral-200"
+          >
+            {DEPARTMENTS.map(d => <option key={d} value={d}>Dept: {d}</option>)}
+          </select>
+        </div>
+
+        <div>
+          <select
+            value={priorityFilter}
+            onChange={e => setPriorityFilter(e.target.value)}
+            className="w-full py-2 px-3 bg-neutral-50 rounded-xl text-sm border border-neutral-200"
+          >
+            <option value="All">Priority: All</option>
+            <option value="Low">Priority: Low</option>
+            <option value="Medium">Priority: Medium</option>
+            <option value="High">Priority: High</option>
+            <option value="Urgent">Priority: Urgent</option>
+          </select>
+        </div>
+
+        <div>
+          <select
+            value={statusFilter}
+            onChange={e => setStatusFilter(e.target.value)}
+            className="w-full py-2 px-3 bg-neutral-50 rounded-xl text-sm border border-neutral-200"
+          >
+            <option value="All">Status: All</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Under Review">Under Review</option>
+            <option value="Assigned">Assigned</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Closed">Closed</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Complaints Table */}
+      {loading ? (
+        <div className="py-20 text-center text-neutral-400">Loading complaints table...</div>
+      ) : (
+        <div className="bg-white rounded-2xl border border-neutral-200 shadow-xs overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-neutral-50/80 border-b border-neutral-200/80 text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+                  <th className="p-4">Complaint</th>
+                  <th className="p-4">Department</th>
+                  <th className="p-4">Priority</th>
+                  <th className="p-4">Assigned Staff</th>
+                  <th className="p-4">Status</th>
+                  <th className="p-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-100 text-sm">
+                {filteredComplaints.map(comp => (
+                  <tr key={comp.id} className="hover:bg-neutral-50/50 transition-colors">
+                    <td className="p-4">
+                      <div className="font-bold text-neutral-900">{comp.title}</div>
+                      <div className="text-xs text-neutral-400 truncate max-w-xs">{comp.location}</div>
+                    </td>
+                    <td className="p-4 font-medium text-neutral-700">{comp.category}</td>
+                    <td className="p-4">
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+                        comp.priority === "Urgent" || comp.priority === "High" ? "bg-rose-50 text-rose-700" : "bg-neutral-100 text-neutral-700"
+                      }`}>
+                        {comp.priority || "Medium"}
+                      </span>
+                    </td>
+                    <td className="p-4 text-neutral-600 font-medium">
+                      {comp.assignedTo || <span className="text-neutral-400 italic">Unassigned</span>}
+                    </td>
+                    <td className="p-4">
+                      <StatusBadge status={comp.status} />
+                    </td>
+                    <td className="p-4 text-right">
+                      <button
+                        onClick={() => openEditModal(comp)}
+                        className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs"
+                      >
+                        Manage & Assign
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* MANAGE & ASSIGN MODAL */}
+      {selectedComplaint && (
+        <Modal
+          isOpen={!!selectedComplaint}
+          onClose={() => setSelectedComplaint(null)}
+          title={`Manage Complaint — ${selectedComplaint.title}`}
+        >
+          <form onSubmit={handleUpdate} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-neutral-700 mb-1">Status Workflow Stage</label>
+                <select
+                  value={editForm.status}
+                  onChange={e => setEditForm({ ...editForm, status: e.target.value })}
+                  className="w-full p-2.5 bg-neutral-50 rounded-xl border border-neutral-200 text-sm"
+                >
+                  <option value="Submitted">Submitted</option>
+                  <option value="Under Review">Under Review</option>
+                  <option value="Assigned">Assigned</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                  <option value="Closed">Closed</option>
+                </select>
               </div>
-              <h3 className="text-xl font-bold text-black mb-2">Inbox Zero</h3>
-              <p className="text-neutral-500 font-medium max-w-sm mx-auto">
-                There are currently no active complaints from students. Great job!
-              </p>
+
+              <div>
+                <label className="block text-xs font-semibold text-neutral-700 mb-1">Assign Staff / Technician</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Rajesh Kumar (HVAC Lead)"
+                  value={editForm.assignedTo}
+                  onChange={e => setEditForm({ ...editForm, assignedTo: e.target.value })}
+                  className="w-full p-2.5 bg-neutral-50 rounded-xl border border-neutral-200 text-sm"
+                />
+              </div>
             </div>
-          ) : (
-            complaints.map(
-              ({ id, title, category, description, status = "Pending", createdAt, photos = [] }) => {
-                const isRejected = status === "Rejected";
 
-                return (
-                  <div key={id} className={`p-6 sm:p-8 transition-colors ${isRejected ? 'bg-neutral-50/50 opacity-75' : 'hover:bg-neutral-50/30'}`}>
-                    <div className="flex flex-col lg:flex-row gap-8">
-                      {/* Content Column */}
-                      <div className="flex-1 min-w-0 flex flex-col sm:flex-row gap-6">
-                        <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-neutral-100 text-black shrink-0 shadow-sm border border-neutral-200/60">
-                          <FileText size={24} strokeWidth={2} />
-                        </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-neutral-700 mb-1">Set Resolution ETA Date</label>
+                <input
+                  type="date"
+                  value={editForm.eta}
+                  onChange={e => setEditForm({ ...editForm, eta: e.target.value })}
+                  className="w-full p-2.5 bg-neutral-50 rounded-xl border border-neutral-200 text-sm"
+                />
+              </div>
 
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between gap-4 mb-2 flex-wrap">
-                            <h3 className="text-xl font-bold text-black tracking-tight leading-tight">{title}</h3>
-                            <span
-                              className={`px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-bold tracking-wider uppercase shrink-0 shadow-sm ${status === "Rejected"
-                                  ? "bg-rose-100 text-rose-700 border border-rose-200"
-                                  : status === "Pending"
-                                    ? "bg-amber-100 text-amber-800 border border-amber-200"
-                                    : status === "Resolved"
-                                      ? "bg-green-100 text-green-800 border border-green-200"
-                                      : "bg-blue-100 text-blue-800 border border-blue-200"
-                                }`}
-                            >
-                              {status}
-                            </span>
-                          </div>
+              <div>
+                <label className="block text-xs font-semibold text-neutral-700 mb-1">Admin Internal Remarks</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Parts ordered from vendor."
+                  value={editForm.adminRemarks}
+                  onChange={e => setEditForm({ ...editForm, adminRemarks: e.target.value })}
+                  className="w-full p-2.5 bg-neutral-50 rounded-xl border border-neutral-200 text-sm"
+                />
+              </div>
+            </div>
 
-                          <div className="flex items-center gap-3 mt-1.5 flex-wrap">
-                            <span className="text-sm font-semibold text-neutral-600 bg-neutral-100 px-2.5 py-1 rounded-md">
-                              {category}
-                            </span>
-                            <span className="w-1 h-1 rounded-full bg-neutral-300 hidden sm:block" />
-                            <span className="text-xs sm:text-sm font-medium text-neutral-500 flex items-center gap-1.5">
-                              <Clock size={14} />
-                              {formatTimeAgo(createdAt)}
-                            </span>
-                          </div>
+            <div>
+              <label className="block text-xs font-semibold text-neutral-700 mb-1">Add Timeline Log Message to Student</label>
+              <textarea
+                rows={3}
+                placeholder="Explain current status update or next steps..."
+                value={editForm.comment}
+                onChange={e => setEditForm({ ...editForm, comment: e.target.value })}
+                className="w-full p-2.5 bg-neutral-50 rounded-xl border border-neutral-200 text-sm"
+              />
+            </div>
 
-                          {description && (
-                            <div className="mt-5 p-4 bg-neutral-50 rounded-xl border border-neutral-200/60">
-                              <p className="text-neutral-700 text-sm leading-relaxed whitespace-pre-line font-medium">
-                                {description}
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Side Actions Column */}
-                      <div className="lg:w-72 shrink-0 flex flex-col gap-6 lg:border-l lg:border-neutral-100 lg:pl-8">
-                        {/* Status Manager */}
-                        <div className="space-y-3">
-                          <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest pl-1">
-                            Update Status
-                          </span>
-                          <div className="grid grid-cols-2 gap-2">
-                            {status === "Pending" && (
-                              <button
-                                onClick={() => updateStatus(id, "Under Review")}
-                                className="col-span-2 flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold rounded-xl border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors shadow-sm"
-                              >
-                                <Eye size={14} />
-                                Begin Review
-                              </button>
-                            )}
-                            {(status === "Pending" || status === "Under Review") && (
-                              <button
-                                onClick={() => updateStatus(id, "In Progress")}
-                                className="col-span-2 flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold rounded-xl border border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors shadow-sm"
-                              >
-                                <PenTool size={14} />
-                                Start Work
-                              </button>
-                            )}
-                            {status !== "Resolved" && status !== "Rejected" && (
-                              <>
-                                <button
-                                  onClick={() => updateStatus(id, "Resolved")}
-                                  className="flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold rounded-xl border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 transition-colors shadow-sm"
-                                >
-                                  <Check size={14} />
-                                  Resolve
-                                </button>
-                                <button
-                                  onClick={() => updateStatus(id, "Rejected")}
-                                  className="flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold rounded-xl border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 transition-colors shadow-sm"
-                                >
-                                  <X size={14} />
-                                  Reject
-                                </button>
-                              </>
-                            )}
-                            {(status === "Resolved" || status === "Rejected") && (
-                              <button
-                                onClick={() => updateStatus(id, "Under Review")}
-                                className="col-span-2 flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold rounded-xl border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 transition-colors shadow-sm"
-                              >
-                                Reopen Complaint
-                              </button>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Photos */}
-                        {photos.length > 0 && (
-                          <div className="space-y-3 pt-6 border-t border-neutral-100">
-                            <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest pl-1">
-                              Attached Evidence ({photos.length})
-                            </span>
-                            <div className="flex gap-2 flex-wrap">
-                              {photos.map((src, i) => (
-                                <a key={i} href={src} target="_blank" rel="noreferrer" className="block relative group">
-                                  <img
-                                    src={src}
-                                    alt={`Proof ${i + 1}`}
-                                    className="w-[72px] h-[72px] object-cover rounded-xl border border-neutral-200 shadow-sm group-hover:scale-105 transition-transform"
-                                  />
-                                  <div className="absolute inset-0 bg-black/40 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <ImageIcon size={16} className="text-white" />
-                                  </div>
-                                </a>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-            )
-          )}
-        </div>
-      </div>
+            <div className="flex justify-end gap-3 pt-4 border-t border-neutral-100">
+              <button
+                type="button"
+                onClick={() => setSelectedComplaint(null)}
+                className="px-4 py-2 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-700"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs"
+              >
+                Save Changes & Notify
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </div>
   );
 }
-
-export default AdminComplaints;
-
