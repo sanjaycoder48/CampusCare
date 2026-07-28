@@ -6,17 +6,18 @@ import Sidebar from "./sidebar.jsx";
 function App() {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const role = typeof window !== "undefined" ? localStorage.getItem("campuscare-role") : null;
+  const role = (typeof window !== "undefined" ? localStorage.getItem("campuscare-role") : null) || "student";
 
   useEffect(() => {
-    if (!role) {
-      navigate("/login", { replace: true });
-    } else if (role === "admin") {
+    if (!localStorage.getItem("campuscare-role")) {
+      localStorage.setItem("campuscare-role", "student");
+    }
+    if (role === "admin") {
       navigate("/admin", { replace: true });
     }
   }, [role, navigate]);
 
-  if (!role || role === "admin") {
+  if (role === "admin") {
     return null;
   }
 
