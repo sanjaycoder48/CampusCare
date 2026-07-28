@@ -1,314 +1,381 @@
-import { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bot, Send, ImagePlus, X, Sparkles, AlertCircle } from "lucide-react";
-import { createComplaint } from "../api";
+import { MessageSquare, AlertTriangle, Upload, X, ShieldAlert } from "lucide-react";
+import { createComplaint, createEmergency } from "../api.js";
+import Toast from "../components/Toast.jsx";
 
-const MAX_PHOTOS = 5;
-const MAX_PHOTO_SIZE = 500 * 1024;
+const DEPARTMENTS = [
+  "Maintenance",
+  "Electrical",
+  "Plumbing",
+  "IT Support",
+  "Hostel",
+  "Cafeteria",
+  "Library",
+  "Transport",
+  "Security",
+  "Academic"
+];
 
-function getAISuggestions(text) {
-  const lower = text.toLowerCase();
-  let category = "Other";
-  const keywords = {
-    Maintenance: ["broken", "leak", "repair", "fountain", "water", "ac", "heating", "light", "door", "window", "toilet"],
-    Infrastructure: ["wifi", "internet", "network", "connection", "electricity", "power"],
-    Safety: ["unsafe", "hazard", "danger", "dark", "lighting", "security", "lock"],
-  };
-  for (const [cat, words] of Object.entries(keywords)) {
-    if (words.some((w) => lower.includes(w))) {
-      category = cat;
-      break;
-    }
-  }
-  const words = text.trim().split(/\s+/).filter(Boolean);
-  const title = words.length > 0
-    ? words.slice(0, Math.min(8, words.length)).map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ")
-    : "";
-  return { category, title, refined: text.trim() ? `${text.trim()}.` : "" };
-}
+const PRIORITIES = ["Low", "Medium", "High", "Urgent"];
 
-function FileComplaint() {
+export default function FileComplaint() {
   const navigate = useNavigate();
-  const fileInputRef = useRef(null);
-  const [userInput, setUserInput] = useState("");
-  const [messages, setMessages] = useState([
-    { role: "assistant", content: "Hi! Describe the issue you're facing on campus, and I'll help you draft a clear complaint. Mention the location, what's wrong, and how long it's been happening." },
-  ]);
-  const [form, setForm] = useState({
+
+  const [mode, setMode] = useState("complaint");
+
+  const [complaintForm, setComplaintForm] = useState({
     title: "",
     category: "Maintenance",
+    priority: "Medium",
+    location: "",
     description: "",
+    photos: []
   });
-  const [photos, setPhotos] = useState([]);
-  const [isTyping, setIsTyping] = useState(false);
 
-  const handleSendToAI = () => {
-    if (!userInput.trim()) return;
-    const userMsg = { role: "user", content: userInput };
-    setMessages((m) => [...m, userMsg]);
-    setUserInput("");
-    setIsTyping(true);
-    setTimeout(() => {
-      const { category, title, refined } = getAISuggestions(userInput);
-      setForm((f) => ({ ...f, category, title: title || f.title, description: refined || f.description }));
-      let reply = category !== "Other" ? `I suggest categorizing it as **${category}**. ` : "";
-      reply += "I've filled the form on the right. Add photos if you have any, and submit when ready.";
-      setMessages((m) => [...m, { role: "assistant", content: reply }]);
-      setIsTyping(false);
-    }, 800);
+  const [emergencyForm, setEmergencyForm] = useState({
+    type: "Medical",
+    location: "",
+    description: "",
+    photos: []
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (type, message) => {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 4000);
   };
 
-  const handlePhotoAdd = (e) => {
+  const handlePhotoAdd = (e, targetForm, setTargetForm) => {
     const files = Array.from(e.target.files || []);
-    if (photos.length + files.length > MAX_PHOTOS) {
-      alert(`Maximum ${MAX_PHOTOS} photos allowed.`);
+    if (targetForm.photos.length + files.length > 4) {
+      showToast("error", "Maximum 4 photos allowed.");
       return;
     }
-    files.forEach((file) => {
+
+    files.forEach(file => {
       if (!file.type.startsWith("image/")) return;
-      if (file.size > MAX_PHOTO_SIZE) {
-        alert(`${file.name} is too large. Max 500KB per photo.`);
-        return;
-      }
       const reader = new FileReader();
-      reader.onload = () => setPhotos((p) => [...p, { name: file.name, data: reader.result }]);
+      reader.onloadend = () => {
+        setTargetForm(prev => ({ ...prev, photos: [...prev.photos, reader.result] }));
+      };
       reader.readAsDataURL(file);
     });
-    e.target.value = "";
   };
 
-  const removePhoto = (index) => setPhotos((p) => p.filter((_, i) => i !== index));
+  const removePhoto = (index, setTargetForm) => {
+    setTargetForm(prev => ({ ...prev, photos: prev.photos.filter((_, i) => i !== index) }));
+  };
 
-  const handleSubmit = async (e) => {
+  const handleSubmitComplaint = async (e) => {
     e.preventDefault();
-    const newComplaint = {
-      ...form,
-      photos: photos.map((p) => p.data),
-      status: "Pending",
-      createdAt: new Date().toISOString(),
-    };
-    await createComplaint(newComplaint);
-    navigate("/complaints");
+    if (!complaintForm.title || !complaintForm.location || !complaintForm.description) {
+      showToast("error", "Please fill in all required complaint fields.");
+      return;
+    }
+
+    setLoading(true);
+    const created = await createComplaint(complaintForm);
+    setLoading(false);
+
+    if (created) {
+      showToast("success", "Complaint filed successfully!");
+      setTimeout(() => navigate("/complaints"), 1200);
+    }
+  };
+
+  const handleSubmitEmergency = async (e) => {
+    e.preventDefault();
+    if (!emergencyForm.location || !emergencyForm.description) {
+      showToast("error", "Please specify emergency location and description.");
+      return;
+    }
+
+    setLoading(true);
+    const created = await createEmergency({
+      ...emergencyForm,
+      time: new Date().toISOString(),
+      status: "Reported",
+      reportedBy: "user"
+    });
+    setLoading(false);
+
+    if (created) {
+      showToast("error", "EMERGENCY ALERT DISPATCHED TO CAMPUS SECURITY!");
+      setTimeout(() => navigate("/complaints"), 1200);
+    }
   };
 
   return (
-    <div className="p-4 sm:p-8 max-w-7xl mx-auto">
-      <div className="mb-8 sm:mb-10">
-        <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight flex items-center gap-3">
-          <div className="flex items-center justify-center p-2 bg-black text-white rounded-xl">
-            <Sparkles size={24} />
-          </div>
-          File a Complaint
+    <div className="p-6 md:p-8 max-w-4xl mx-auto space-y-8">
+      <Toast toast={toast} onClose={() => setToast(null)} />
+
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-neutral-900 tracking-tight flex items-center gap-3">
+          {mode === "emergency" ? (
+            <AlertTriangle className="w-8 h-8 text-rose-600 animate-pulse" />
+          ) : (
+            <MessageSquare className="w-8 h-8 text-indigo-600" />
+          )}
+          Issue & Emergency Reporting Portal
         </h1>
-        <p className="text-sm sm:text-base text-neutral-500 mt-2">Chat with our AI assistant to quickly draft a detailed, actionable complaint.</p>
+        <p className="text-neutral-500 mt-1">
+          File standard department complaints or broadcast immediate campus emergency alerts.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+      {/* Mode Switcher */}
+      <div className="flex bg-neutral-100 p-1.5 rounded-2xl border border-neutral-200 shadow-xs">
+        <button
+          type="button"
+          onClick={() => setMode("complaint")}
+          className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+            mode === "complaint"
+              ? "bg-white text-indigo-700 shadow-md shadow-indigo-100"
+              : "text-neutral-600 hover:text-neutral-900"
+          }`}
+        >
+          <MessageSquare className="w-4 h-4" /> Standard Complaint
+        </button>
+        <button
+          type="button"
+          onClick={() => setMode("emergency")}
+          className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+            mode === "emergency"
+              ? "bg-rose-600 text-white shadow-md shadow-rose-200"
+              : "text-rose-600 hover:bg-rose-50"
+          }`}
+        >
+          <AlertTriangle className="w-4 h-4" /> Urgent Emergency Alert
+        </button>
+      </div>
 
-        {/* AI Assistant Column */}
-        <div className="lg:col-span-5 flex flex-col h-[500px] lg:h-[600px] bg-white border border-neutral-200 rounded-3xl shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-neutral-100 flex items-center gap-3 bg-neutral-50/50">
-            <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center">
-              <Bot size={18} />
-            </div>
+      {/* STANDARD COMPLAINT FORM */}
+      {mode === "complaint" ? (
+        <form onSubmit={handleSubmitComplaint} className="bg-white rounded-3xl border border-neutral-200 p-6 md:p-8 space-y-6 shadow-xs">
+          <div>
+            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Complaint Title *</label>
+            <input
+              type="text"
+              required
+              placeholder="e.g. Broken AC dripping water in Library Silent Study Zone"
+              value={complaintForm.title}
+              onChange={e => setComplaintForm({ ...complaintForm, title: e.target.value })}
+              className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <span className="font-bold text-black tracking-tight block">AI Assistant</span>
-              <span className="text-xs text-neutral-500 font-medium">Ready to help</span>
+              <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Department Category *</label>
+              <select
+                value={complaintForm.category}
+                onChange={e => setComplaintForm({ ...complaintForm, category: e.target.value })}
+                className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              >
+                {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
             </div>
-          </div>
 
-          <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#fafafa]">
-            {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
-                <div
-                  className={`max-w-[85%] px-5 py-3.5 rounded-2xl text-sm leading-relaxed ${msg.role === "user"
-                      ? "bg-black text-white rounded-br-sm shadow-md shadow-black/10"
-                      : "bg-white text-neutral-800 border border-neutral-200 rounded-bl-sm shadow-sm"
+            <div>
+              <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Priority Level *</label>
+              <div className="grid grid-cols-4 gap-2">
+                {PRIORITIES.map(p => (
+                  <button
+                    type="button"
+                    key={p}
+                    onClick={() => setComplaintForm({ ...complaintForm, priority: p })}
+                    className={`py-2 rounded-xl text-xs font-bold border transition-all ${
+                      complaintForm.priority === p
+                        ? p === "Urgent" || p === "High"
+                          ? "bg-rose-600 text-white border-rose-600 shadow-xs"
+                          : "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+                        : "bg-neutral-50 text-neutral-600 border-neutral-200 hover:bg-neutral-100"
                     }`}
-                >
-                  {msg.content.replace(/\*\*(.*?)\*\*/g, (match, p1) => `<strong class="font-bold">${p1}</strong>`)}
-                  <div dangerouslySetInnerHTML={{ __html: msg.content.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold">$1</strong>') }} />
-                </div>
+                  >
+                    {p}
+                  </button>
+                ))}
               </div>
-            ))}
-            {isTyping && (
-              <div className="flex justify-start animate-in fade-in">
-                <div className="bg-white border border-neutral-200 px-5 py-4 rounded-2xl rounded-bl-sm shadow-sm flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <div className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <div className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-                </div>
-              </div>
-            )}
+            </div>
           </div>
 
-          <div className="p-4 bg-white border-t border-neutral-100">
-            <div className="flex items-end gap-2 bg-neutral-50 p-1.5 rounded-2xl border border-neutral-200 focus-within:ring-2 focus-within:ring-black/5 focus-within:border-neutral-300 transition-all">
-              <textarea
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSendToAI();
-                  }
-                }}
-                placeholder="Describe your issue here..."
-                rows={1}
-                className="flex-1 max-h-32 px-4 py-3 bg-transparent text-sm text-black placeholder-neutral-400 resize-none outline-none overflow-y-auto"
-                style={{ minHeight: "44px" }}
-              />
-              <button
-                type="button"
-                onClick={handleSendToAI}
-                disabled={!userInput.trim()}
-                className="shrink-0 p-3 bg-black text-white rounded-xl hover:bg-neutral-800 disabled:bg-neutral-200 disabled:text-neutral-400 transition-colors"
+          <div>
+            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Specific Campus Location *</label>
+            <input
+              type="text"
+              required
+              placeholder="e.g. Block C, 3rd Floor Washroom / Hostel B Room 204"
+              value={complaintForm.location}
+              onChange={e => setComplaintForm({ ...complaintForm, location: e.target.value })}
+              className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Detailed Issue Description *</label>
+            <textarea
+              rows={4}
+              required
+              placeholder="Describe the issue, severity, and any hazards..."
+              value={complaintForm.description}
+              onChange={e => setComplaintForm({ ...complaintForm, description: e.target.value })}
+              className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            />
+          </div>
+
+          {/* Photos */}
+          <div>
+            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Photo Attachments (Max 4)</label>
+            <div className="flex items-center gap-3 flex-wrap">
+              {complaintForm.photos.map((img, idx) => (
+                <div key={idx} className="w-20 h-20 bg-neutral-100 rounded-xl overflow-hidden relative group border border-neutral-200">
+                  <img src={img} alt="attachment" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(idx, setComplaintForm)}
+                    className="absolute top-1 right-1 p-1 bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+
+              {complaintForm.photos.length < 4 && (
+                <label className="w-20 h-20 rounded-xl border-2 border-dashed border-neutral-300 hover:border-indigo-500 bg-neutral-50 flex flex-col items-center justify-center cursor-pointer text-neutral-400 hover:text-indigo-600 transition-colors">
+                  <Upload className="w-5 h-5 mb-1" />
+                  <span className="text-[10px] font-semibold">Add Photo</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={e => handlePhotoAdd(e, complaintForm, setComplaintForm)}
+                    className="hidden"
+                  />
+                </label>
+              )}
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-3">
+            <button
+              type="button"
+              onClick={() => navigate("/complaints")}
+              className="px-5 py-2.5 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-neutral-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
+            >
+              {loading ? "Submitting..." : "Submit Complaint"}
+            </button>
+          </div>
+        </form>
+      ) : (
+        /* EMERGENCY ALERT FORM */
+        <form onSubmit={handleSubmitEmergency} className="bg-white rounded-3xl border-2 border-rose-200 p-6 md:p-8 space-y-6 shadow-md">
+          <div className="flex items-center gap-3 p-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-800 text-xs font-semibold leading-relaxed">
+            <ShieldAlert className="w-5 h-5 text-rose-600 flex-shrink-0" />
+            <span>Emergency alerts notify campus security and quick response teams immediately. For immediate life-threatening situations, call emergency services (911/112) first.</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Emergency Type *</label>
+              <select
+                value={emergencyForm.type}
+                onChange={e => setEmergencyForm({ ...emergencyForm, type: e.target.value })}
+                className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm font-semibold text-neutral-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
               >
-                <Send size={18} className={userInput.trim() ? "translate-x-0.5" : ""} />
-              </button>
-            </div>
-            <p className="text-[10px] text-center text-neutral-400 mt-2 font-medium uppercase tracking-wider">Press Enter to send</p>
-          </div>
-        </div>
-
-        {/* Form Column */}
-        <div className="lg:col-span-7 bg-white border border-neutral-200 rounded-3xl shadow-sm p-6 sm:p-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex-1 h-px bg-neutral-100"></div>
-            <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Final Details</span>
-            <div className="flex-1 h-px bg-neutral-100"></div>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-black tracking-tight flex items-center gap-1.5">
-                  Complaint Title
-                  <span className="text-rose-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={form.title}
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  placeholder="e.g. Broken Water Fountain in Library"
-                  required
-                  className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-black text-sm placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-neutral-300 transition-all font-medium"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-black tracking-tight">
-                  Category
-                </label>
-                <select
-                  value={form.category}
-                  onChange={(e) => setForm({ ...form, category: e.target.value })}
-                  className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-black text-sm focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-neutral-300 transition-all font-medium appearance-none"
-                  style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: `right 0.5rem center`, backgroundRepeat: `no-repeat`, backgroundSize: `1.5em 1.5em` }}
-                >
-                  <option value="Maintenance">Maintenance</option>
-                  <option value="Infrastructure">Infrastructure</option>
-                  <option value="Safety">Safety</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
+                <option value="Medical">Medical Emergency</option>
+                <option value="Security">Security Incident / Tailgating</option>
+                <option value="Fire">Fire / Chemical Hazard</option>
+                <option value="Other">Other Urgent Situation</option>
+              </select>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-black tracking-tight flex items-center gap-1.5">
-                Detailed Description
-                <span className="text-rose-500">*</span>
-              </label>
-              <textarea
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                placeholder="Provide all relevant details, specific location, and how long this has been an issue..."
-                rows={5}
+            <div>
+              <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Exact Campus Location *</label>
+              <input
+                type="text"
                 required
-                className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-black text-sm placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-neutral-300 transition-all resize-none font-medium leading-relaxed"
+                placeholder="e.g. Football Ground / Chemistry Lab 2"
+                value={emergencyForm.location}
+                onChange={e => setEmergencyForm({ ...emergencyForm, location: e.target.value })}
+                className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20"
               />
             </div>
+          </div>
 
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-bold text-black tracking-tight">
-                  Attachments (Optional)
+          <div>
+            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Brief Incident Description *</label>
+            <textarea
+              rows={4}
+              required
+              placeholder="Describe the urgent situation quickly..."
+              value={emergencyForm.description}
+              onChange={e => setEmergencyForm({ ...emergencyForm, description: e.target.value })}
+              className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+            />
+          </div>
+
+          {/* Emergency Photo Attachments */}
+          <div>
+            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Photo Proof (Optional, only if safe)</label>
+            <div className="flex items-center gap-3 flex-wrap">
+              {emergencyForm.photos.map((img, idx) => (
+                <div key={idx} className="w-20 h-20 bg-neutral-100 rounded-xl overflow-hidden relative group border border-neutral-200">
+                  <img src={img} alt="emergency attachment" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(idx, setEmergencyForm)}
+                    className="absolute top-1 right-1 p-1 bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+
+              {emergencyForm.photos.length < 3 && (
+                <label className="w-20 h-20 rounded-xl border-2 border-dashed border-rose-300 hover:border-rose-500 bg-rose-50/50 flex flex-col items-center justify-center cursor-pointer text-rose-500 hover:bg-rose-100 transition-colors">
+                  <Upload className="w-5 h-5 mb-1" />
+                  <span className="text-[10px] font-bold">Add Photo</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={e => handlePhotoAdd(e, emergencyForm, setEmergencyForm)}
+                    className="hidden"
+                  />
                 </label>
-                <span className="text-xs font-semibold text-neutral-400 bg-neutral-100 px-2 py-1 rounded-md">
-                  {photos.length} / {MAX_PHOTOS}
-                </span>
-              </div>
-
-              <div className="p-4 bg-neutral-50 border border-neutral-200 border-dashed rounded-2xl">
-                <input ref={fileInputRef} type="file" accept="image/*" multiple capture="environment" onChange={handlePhotoAdd} className="hidden" />
-
-                {photos.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-6 text-center">
-                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm border border-neutral-100 mb-3">
-                      <ImagePlus size={20} className="text-neutral-400" />
-                    </div>
-                    <p className="text-sm font-semibold text-black mb-1">Upload visual proofs</p>
-                    <p className="text-xs text-neutral-500 max-w-[200px] mb-4">Adding photos helps authorities resolve issues faster.</p>
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      className="px-4 py-2 bg-white border border-neutral-200 rounded-lg text-sm font-semibold text-black hover:bg-neutral-50 hover:border-neutral-300 transition-colors shadow-sm"
-                    >
-                      Select Files
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap gap-3">
-                    {photos.map((photo, i) => (
-                      <div key={i} className="relative group">
-                        <img src={photo.data} alt="Proof" className="w-24 h-24 object-cover rounded-xl border border-neutral-200 shadow-sm" />
-                        <button
-                          type="button"
-                          onClick={() => removePhoto(i)}
-                          className="absolute -top-2 -right-2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all transform group-hover:scale-100 scale-90 shadow-md"
-                        >
-                          <X size={14} strokeWidth={3} />
-                        </button>
-                      </div>
-                    ))}
-                    {photos.length < MAX_PHOTOS && (
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="w-24 h-24 bg-white border-2 border-dashed border-neutral-200 rounded-xl flex flex-col items-center justify-center hover:border-neutral-400 hover:bg-neutral-50 transition-colors text-neutral-400 gap-1"
-                      >
-                        <ImagePlus size={20} />
-                        <span className="text-[10px] font-bold uppercase tracking-wider">Add More</span>
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="flex items-start gap-1.5 text-xs text-neutral-500">
-                <AlertCircle size={14} className="shrink-0 mt-0.5" />
-                <p>Images only. Max 500KB per file. Avoid taking photos of sensitive or private areas.</p>
-              </div>
+              )}
             </div>
+          </div>
 
-            <div className="pt-6 border-t border-neutral-100 flex flex-col sm:flex-row gap-3">
-              <button
-                type="submit"
-                className="flex-1 px-6 py-3.5 bg-black text-white rounded-xl font-bold hover:bg-neutral-800 hover:shadow-lg hover:shadow-black/10 transition-all active:scale-[0.98]"
-              >
-                Submit Official Complaint
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate("/complaints")}
-                className="px-6 py-3.5 bg-white border border-neutral-200 text-black rounded-xl font-bold hover:bg-neutral-50 hover:border-neutral-300 transition-all"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+          <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-3">
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="px-5 py-2.5 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-neutral-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-md shadow-rose-200 transition-colors flex items-center gap-2"
+            >
+              <AlertTriangle className="w-4 h-4" /> {loading ? "Broadcasting..." : "Broadcast Emergency Alert"}
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }
-
-export default FileComplaint;

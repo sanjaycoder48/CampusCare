@@ -104,26 +104,26 @@ function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {stats.map(({ label, value, icon: Icon, action, bg, iconBg, onClick, actionText }) => (
+        {stats.map(item => (
           <button
-            key={label}
-            onClick={onClick}
-            className={`group flex items-center gap-5 p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg ${action ? "hover:shadow-black/20" : "hover:shadow-neutral-200 ring-1 ring-neutral-200"
-              } ${bg}`}
+            key={item.label}
+            onClick={item.onClick}
+            className={`group flex items-center gap-5 p-6 rounded-2xl text-left transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg ${item.action ? "hover:shadow-black/20" : "hover:shadow-neutral-200 ring-1 ring-neutral-200"
+              } ${item.bg}`}
           >
-            <div className={`flex items-center justify-center w-14 h-14 rounded-xl shrink-0 transition-transform duration-300 group-hover:scale-110 ${iconBg}`}>
-              <Icon size={24} strokeWidth={2} />
+            <div className={`flex items-center justify-center w-14 h-14 rounded-xl shrink-0 transition-transform duration-300 group-hover:scale-110 ${item.iconBg}`}>
+              <item.icon size={24} strokeWidth={2} />
             </div>
             <div>
-              {action ? (
+              {item.action ? (
                 <>
-                  <p className={`font-bold ${bg.includes("bg-black") ? "text-white" : "text-black"} text-lg tracking-tight`}>{label}</p>
-                  <p className={`${bg.includes("bg-black") ? "text-white/70" : "text-neutral-500"} text-sm mt-1`}>{actionText}</p>
+                  <p className={`font-bold ${item.bg.includes("bg-black") ? "text-white" : "text-black"} text-lg tracking-tight`}>{item.label}</p>
+                  <p className={`${item.bg.includes("bg-black") ? "text-white/70" : "text-neutral-500"} text-sm mt-1`}>{item.actionText}</p>
                 </>
               ) : (
                 <>
-                  <p className="text-3xl font-bold text-black tracking-tight mb-1">{value}</p>
-                  <p className="text-sm font-medium text-neutral-500">{label}</p>
+                  <p className="text-3xl font-bold text-black tracking-tight mb-1">{item.value}</p>
+                  <p className="text-sm font-medium text-neutral-500">{item.label}</p>
                 </>
               )}
             </div>
