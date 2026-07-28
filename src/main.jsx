@@ -9,18 +9,19 @@ import FileComplaint from "./pages/FileComplaint.jsx";
 import ReportEmergency from "./pages/ReportEmergency.jsx";
 import MyComplaints from "./pages/MyComplaints.jsx";
 import Login from "./pages/Login.jsx";
+import Events from "./pages/Events.jsx";
+import LostFound from "./pages/LostFound.jsx";
+import HonoursMinors from "./pages/HonoursMinors.jsx";
+import Syllabus from "./pages/Syllabus.jsx";
+
 import AdminLayout from "./admin/AdminLayout.jsx";
 import AdminDashboard from "./admin/AdminDashboard.jsx";
 import AdminComplaints from "./admin/AdminComplaints.jsx";
 import AdminEmergencies from "./admin/AdminEmergencies.jsx";
-import Events from "./pages/Events.jsx";
-import LostFound from "./pages/LostFound.jsx";
-import Facilities from "./pages/Facilities.jsx";
-import Cafeteria from "./pages/Cafeteria.jsx";
 import AdminEvents from "./admin/AdminEvents.jsx";
 import AdminLostFound from "./admin/AdminLostFound.jsx";
-import AdminFacilities from "./admin/AdminFacilities.jsx";
-import AdminCafeteria from "./admin/AdminCafeteria.jsx";
+import AdminHonoursMinors from "./admin/AdminHonoursMinors.jsx";
+import AdminSyllabus from "./admin/AdminSyllabus.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -34,8 +35,8 @@ createRoot(document.getElementById("root")).render(
           <Route path="complaints" element={<MyComplaints />} />
           <Route path="events" element={<Events />} />
           <Route path="lostfound" element={<LostFound />} />
-          <Route path="facilities" element={<Facilities />} />
-          <Route path="cafeteria" element={<Cafeteria />} />
+          <Route path="honours-minors" element={<HonoursMinors />} />
+          <Route path="syllabus" element={<Syllabus />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
@@ -43,8 +44,8 @@ createRoot(document.getElementById("root")).render(
           <Route path="emergencies" element={<AdminEmergencies />} />
           <Route path="events" element={<AdminEvents />} />
           <Route path="lostfound" element={<AdminLostFound />} />
-          <Route path="facilities" element={<AdminFacilities />} />
-          <Route path="cafeteria" element={<AdminCafeteria />} />
+          <Route path="honours-minors" element={<AdminHonoursMinors />} />
+          <Route path="syllabus" element={<AdminSyllabus />} />
         </Route>
       </Routes>
     </BrowserRouter>

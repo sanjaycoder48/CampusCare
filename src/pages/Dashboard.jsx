@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileText, AlertTriangle, PenLine, Clock, ChevronRight, Calendar, Package, DoorOpen, Coffee } from "lucide-react";
+import { FileText, AlertTriangle, PenLine, Clock, ChevronRight, Calendar, Package, GraduationCap, BookOpen } from "lucide-react";
 import { fetchComplaints, fetchEmergencies } from "../api";
 
 function formatTimeAgo(dateStr) {
@@ -23,12 +23,12 @@ function Dashboard() {
       fetchComplaints(),
       fetchEmergencies()
     ]).then(([complaintsData, emergenciesData]) => {
-      setComplaints(complaintsData);
-      setEmergencies(emergenciesData);
+      setComplaints(complaintsData || []);
+      setEmergencies(emergenciesData || []);
     });
   }, []);
 
-  const myPendingComplaints = complaints.filter((c) => c.status === "Pending" || !c.status).length;
+  const myPendingComplaints = complaints.filter((c) => c.status === "Pending" || c.status === "Submitted").length;
   const myReportedEmergencies = emergencies.filter((e) => e.reportedBy === "user").length;
   const recentComplaints = complaints.slice(0, 4);
 
@@ -39,57 +39,57 @@ function Dashboard() {
       icon: FileText,
       onClick: () => navigate("/complaints"),
       bg: "bg-neutral-50",
-      iconBg: "bg-white border border-neutral-200 shadow-sm text-black"
+      iconBg: "bg-white border border-neutral-200 shadow-xs text-black"
     },
     {
-      label: "Emergencies I Reported",
+      label: "Emergencies Reported",
       value: String(myReportedEmergencies),
       icon: AlertTriangle,
-      onClick: () => navigate("/complaints"),
+      onClick: () => navigate("/report-emergency"),
       bg: "bg-neutral-50",
-      iconBg: "bg-white border border-rose-100 shadow-sm text-rose-600"
+      iconBg: "bg-white border border-rose-100 shadow-xs text-rose-600"
     },
     {
-      label: "Campus Events",
+      label: "Events & Clubs",
       icon: Calendar,
       action: true,
-      actionText: "View schedule",
+      actionText: "View department activities",
       onClick: () => navigate("/events"),
       bg: "bg-indigo-50",
-      iconBg: "bg-white border border-indigo-200 shadow-sm text-indigo-600"
+      iconBg: "bg-white border border-indigo-200 shadow-xs text-indigo-600"
     },
     {
-      label: "Facility Booking",
-      icon: DoorOpen,
+      label: "Honours & Minors",
+      icon: GraduationCap,
       action: true,
-      actionText: "Reserve spaces",
-      onClick: () => navigate("/facilities"),
-      bg: "bg-cyan-50",
-      iconBg: "bg-white border border-cyan-200 shadow-sm text-cyan-600"
+      actionText: "Specialization tracks",
+      onClick: () => navigate("/honours-minors"),
+      bg: "bg-purple-50",
+      iconBg: "bg-white border border-purple-200 shadow-xs text-purple-600"
     },
     {
-      label: "Cafeteria & Mess",
-      icon: Coffee,
+      label: "Academic Syllabus",
+      icon: BookOpen,
       action: true,
-      actionText: "View today's menu",
-      onClick: () => navigate("/cafeteria"),
-      bg: "bg-orange-50",
-      iconBg: "bg-white border border-orange-200 shadow-sm text-orange-600"
+      actionText: "5-unit course directory",
+      onClick: () => navigate("/syllabus"),
+      bg: "bg-sky-50",
+      iconBg: "bg-white border border-sky-200 shadow-xs text-sky-600"
     },
     {
       label: "Lost & Found",
       icon: Package,
       action: true,
-      actionText: "Report or retrieve",
+      actionText: "Report & claim items",
       onClick: () => navigate("/lostfound"),
       bg: "bg-amber-50",
-      iconBg: "bg-white border border-amber-200 shadow-sm text-amber-600"
+      iconBg: "bg-white border border-amber-200 shadow-xs text-amber-600"
     },
     {
       label: "File New Complaint",
       icon: PenLine,
       action: true,
-      actionText: "Get AI assistance",
+      actionText: "Submit issue to department",
       onClick: () => navigate("/file-complaint"),
       bg: "bg-black md:col-span-2 lg:col-span-1",
       iconBg: "bg-white/10 text-white"
@@ -97,13 +97,13 @@ function Dashboard() {
   ];
 
   return (
-    <div className="p-4 sm:p-8 max-w-6xl mx-auto">
-      <div className="mb-8 sm:mb-10">
+    <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-8">
+      <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">Dashboard</h1>
-        <p className="text-sm sm:text-base text-neutral-500 mt-2">Welcome back! Track your complaints and report campus issues</p>
+        <p className="text-sm sm:text-base text-neutral-500 mt-2">Welcome back! Track your campus services, department events, and syllabus.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map(({ label, value, icon: Icon, action, bg, iconBg, onClick, actionText }) => (
           <button
             key={label}
@@ -131,7 +131,7 @@ function Dashboard() {
         ))}
       </div>
 
-      <div className="bg-white border border-neutral-200 rounded-3xl overflow-hidden shadow-sm">
+      <div className="bg-white border border-neutral-200 rounded-3xl overflow-hidden shadow-xs">
         <div className="px-6 sm:px-8 py-6 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
           <h2 className="text-lg font-bold text-black tracking-tight">Recent Complaints</h2>
           <button
@@ -148,12 +148,12 @@ function Dashboard() {
               <div className="w-16 h-16 bg-neutral-50 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FileText size={24} className="text-neutral-400" />
               </div>
-              <p className="text-neutral-500 font-medium mb-3">No complaints yet.</p>
+              <p className="text-neutral-500 font-medium mb-3">No complaints filed yet.</p>
               <button
                 onClick={() => navigate("/file-complaint")}
                 className="text-black font-semibold hover:text-neutral-600 transition-colors"
               >
-                File one with AI
+                File a new complaint
               </button>
             </div>
           ) : (
@@ -164,7 +164,7 @@ function Dashboard() {
                 onClick={() => navigate("/complaints")}
               >
                 <div className="flex items-center gap-5">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-neutral-100 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-neutral-200 transition-all shrink-0">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-neutral-100 group-hover:bg-white group-hover:shadow-xs border border-transparent group-hover:border-neutral-200 transition-all shrink-0">
                     <FileText size={22} className="text-black" />
                   </div>
                   <div>
@@ -178,16 +178,17 @@ function Dashboard() {
                 </div>
                 <div className="mt-4 sm:mt-0 pl-17 sm:pl-0">
                   <span
-                    className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase ${status?.toLowerCase() === "rejected"
+                    className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase ${
+                      status?.toLowerCase() === "rejected"
                         ? "bg-rose-100 text-rose-700"
-                        : status === "Pending" || !status
+                        : status === "Submitted" || status === "Pending"
                           ? "bg-neutral-100 text-neutral-700"
                           : status === "Resolved"
                             ? "bg-green-100 text-green-800"
                             : "bg-blue-100 text-blue-800"
-                      }`}
+                    }`}
                   >
-                    {status || "Pending"}
+                    {status || "Submitted"}
                   </span>
                 </div>
               </div>
