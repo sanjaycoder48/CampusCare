@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -8,8 +8,7 @@ import {
   GraduationCap,
   BookOpen,
   LogOut,
-  X,
-  ShieldAlert
+  X
 } from "lucide-react";
 
 export default function AdminSidebar({ onClose }) {
