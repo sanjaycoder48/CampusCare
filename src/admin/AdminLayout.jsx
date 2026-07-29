@@ -1,5 +1,5 @@
-import { Outlet, useNavigate } from "react";
 import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import AdminSidebar from "./AdminSidebar.jsx";
 
