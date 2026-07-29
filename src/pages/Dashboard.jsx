@@ -45,7 +45,7 @@ function Dashboard() {
       label: "Emergencies Reported",
       value: String(myReportedEmergencies),
       icon: AlertTriangle,
-      onClick: () => navigate("/report-emergency"),
+      onClick: () => navigate("/file-complaint"),
       bg: "bg-neutral-50",
       iconBg: "bg-white border border-rose-100 shadow-xs text-rose-600"
     },
