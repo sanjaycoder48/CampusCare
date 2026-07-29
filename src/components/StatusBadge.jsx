@@ -3,23 +3,22 @@ import React from "react";
 export default function StatusBadge({ status }) {
   const s = (status || "Pending").toLowerCase();
 
-  let colorClasses = "bg-slate-100 text-slate-700 border-slate-200";
+  let colorClasses = "bg-neutral-100 text-neutral-700 border border-neutral-200";
 
   if (s === "submitted" || s === "open" || s === "pending" || s === "reported") {
-    colorClasses = "bg-amber-100/80 text-amber-900 border-amber-300/60";
+    colorClasses = "bg-amber-50 text-amber-800 border border-amber-200";
   } else if (s === "in progress" || s === "under review" || s === "assigned" || s === "matched" || s === "claim requested") {
-    colorClasses = "bg-indigo-100/90 text-indigo-950 border-indigo-300/60 font-bold";
+    colorClasses = "bg-blue-50 text-blue-800 border border-blue-200";
   } else if (s === "resolved" || s === "verified" || s === "returned" || s === "approved" || s === "joined") {
-    colorClasses = "bg-emerald-100/90 text-emerald-950 border-emerald-300/60 font-bold";
+    colorClasses = "bg-emerald-50 text-emerald-800 border border-emerald-200";
   } else if (s === "closed" || s === "rejected" || s === "cancelled") {
-    colorClasses = "bg-rose-100/90 text-rose-950 border-rose-300/60 font-bold";
+    colorClasses = "bg-rose-50 text-rose-800 border border-rose-200";
   }
 
   return (
     <span
-      className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase border shadow-2xs ${colorClasses}`}
+      className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold tracking-wide uppercase ${colorClasses}`}
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80" />
       {status || "Pending"}
     </span>
   );

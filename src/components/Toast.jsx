@@ -6,18 +6,18 @@ export default function Toast({ toast, onClose }) {
 
   const { type, message } = toast;
 
-  let bg = "bg-slate-900 text-white";
-  let icon = <Info className="w-5 h-5 text-sky-400" />;
+  let bg = "bg-neutral-900 text-white";
+  let icon = <Info className="w-5 h-5 text-white/60" />;
 
   if (type === "success") {
-    bg = "bg-slate-900 text-white border border-emerald-500/30";
+    bg = "bg-neutral-900 text-white";
     icon = <CheckCircle2 className="w-5 h-5 text-emerald-400" />;
   } else if (type === "error") {
-    bg = "bg-slate-900 text-white border border-rose-500/30";
+    bg = "bg-neutral-900 text-white";
     icon = <AlertCircle className="w-5 h-5 text-rose-400" />;
   } else if (type === "info") {
-    bg = "bg-slate-900 text-white border border-indigo-500/30";
-    icon = <Info className="w-5 h-5 text-indigo-400" />;
+    bg = "bg-neutral-900 text-white";
+    icon = <Info className="w-5 h-5 text-blue-400" />;
   }
 
   return (
@@ -26,10 +26,7 @@ export default function Toast({ toast, onClose }) {
         {icon}
         <span className="text-xs font-semibold tracking-wide leading-relaxed">{message}</span>
         {onClose && (
-          <button
-            onClick={onClose}
-            className="p-1 text-slate-400 hover:text-white rounded-full hover:bg-slate-800 transition-colors ml-auto"
-          >
+          <button onClick={onClose} className="p-1 text-white/40 hover:text-white rounded-full transition-colors ml-auto">
             <X className="w-4 h-4" />
           </button>
         )}

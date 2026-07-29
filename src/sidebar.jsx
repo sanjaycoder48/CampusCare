@@ -31,33 +31,28 @@ export default function Sidebar({ onClose }) {
   ];
 
   return (
-    <aside className="w-72 bg-slate-50/90 backdrop-blur-md border-r border-slate-200/80 flex flex-col h-screen sticky top-0 z-40 select-none">
-      {/* M3 Header */}
-      <div className="p-6 border-b border-slate-200/60 flex items-center justify-between">
+    <aside className="w-64 bg-white border-r border-neutral-200/80 flex flex-col h-screen sticky top-0 shadow-xs">
+      <div className="p-6 border-b border-neutral-100 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-indigo-200">
-            <Sparkles size={20} />
+          <div className="w-9 h-9 rounded-xl bg-black flex items-center justify-center text-white shadow-md shadow-black/10">
+            <Sparkles size={18} />
           </div>
           <div>
-            <div className="font-bold text-slate-900 text-base leading-tight tracking-tight">CampusCare</div>
-            <div className="text-[11px] text-indigo-600 font-semibold uppercase tracking-wider">Student Portal</div>
+            <div className="font-bold text-neutral-900 leading-tight">CampusCare</div>
+            <div className="text-[11px] text-neutral-400 font-medium">Student Portal</div>
           </div>
         </div>
         {onClose && (
           <button
             onClick={onClose}
-            className="md:hidden p-2 text-slate-500 hover:text-slate-900 rounded-full hover:bg-slate-200/60 transition-colors"
+            className="md:hidden p-1.5 text-neutral-400 hover:text-neutral-700 rounded-lg"
           >
             <X size={20} />
           </button>
         )}
       </div>
 
-      {/* M3 Navigation Drawer List */}
-      <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
-        <div className="px-4 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-widest">
-          Main Menu
-        </div>
+      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         {navItems.map(item => {
           const IconComp = item.icon;
           return (
@@ -67,28 +62,27 @@ export default function Sidebar({ onClose }) {
               onClick={onClose}
               end={item.path === "/"}
               className={({ isActive }) =>
-                `m3-nav-item transition-all duration-200 ${
+                `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                   isActive
-                    ? "m3-nav-item-active shadow-xs"
-                    : "text-slate-600 hover:bg-slate-200/60 hover:text-slate-900"
+                    ? "bg-neutral-900 text-white font-bold shadow-sm"
+                    : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
                 }`
               }
             >
-              <IconComp size={20} className="shrink-0" />
-              <span className="truncate">{item.label}</span>
+              <IconComp size={18} />
+              <span>{item.label}</span>
             </NavLink>
           );
         })}
       </nav>
 
-      {/* M3 Footer Actions */}
-      <div className="p-4 border-t border-slate-200/60">
+      <div className="p-4 border-t border-neutral-100">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold text-rose-700 hover:bg-rose-100/70 transition-all duration-200"
+          className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
         >
           <LogOut size={18} />
-          <span>Sign Out</span>
+          <span>Logout</span>
         </button>
       </div>
     </aside>
