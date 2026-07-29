@@ -8,7 +8,8 @@ import {
   GraduationCap,
   BookOpen,
   LogOut,
-  X
+  X,
+  Sparkles
 } from "lucide-react";
 
 export default function Sidebar({ onClose }) {
@@ -30,28 +31,33 @@ export default function Sidebar({ onClose }) {
   ];
 
   return (
-    <aside className="w-64 bg-white border-r border-neutral-200/80 flex flex-col h-screen sticky top-0 shadow-xs">
-      <div className="p-6 border-b border-neutral-100 flex items-center justify-between">
+    <aside className="w-72 bg-slate-50/90 backdrop-blur-md border-r border-slate-200/80 flex flex-col h-screen sticky top-0 z-40 select-none">
+      {/* M3 Header */}
+      <div className="p-6 border-b border-slate-200/60 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-lg shadow-sm">
-            C
+          <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-indigo-200">
+            <Sparkles size={20} />
           </div>
           <div>
-            <div className="font-bold text-neutral-900 leading-tight">CampusCare</div>
-            <div className="text-[11px] text-neutral-400 font-medium">Student Portal</div>
+            <div className="font-bold text-slate-900 text-base leading-tight tracking-tight">CampusCare</div>
+            <div className="text-[11px] text-indigo-600 font-semibold uppercase tracking-wider">Student Portal</div>
           </div>
         </div>
         {onClose && (
           <button
             onClick={onClose}
-            className="md:hidden p-1.5 text-neutral-400 hover:text-neutral-700 rounded-lg"
+            className="md:hidden p-2 text-slate-500 hover:text-slate-900 rounded-full hover:bg-slate-200/60 transition-colors"
           >
             <X size={20} />
           </button>
         )}
       </div>
 
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+      {/* M3 Navigation Drawer List */}
+      <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
+        <div className="px-4 pb-2 text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+          Main Menu
+        </div>
         {navItems.map(item => {
           const IconComp = item.icon;
           return (
@@ -61,27 +67,28 @@ export default function Sidebar({ onClose }) {
               onClick={onClose}
               end={item.path === "/"}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                `m3-nav-item transition-all duration-200 ${
                   isActive
-                    ? "bg-indigo-50 text-indigo-700 font-bold"
-                    : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
+                    ? "m3-nav-item-active shadow-xs"
+                    : "text-slate-600 hover:bg-slate-200/60 hover:text-slate-900"
                 }`
               }
             >
-              <IconComp size={18} />
-              <span>{item.label}</span>
+              <IconComp size={20} className="shrink-0" />
+              <span className="truncate">{item.label}</span>
             </NavLink>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-neutral-100">
+      {/* M3 Footer Actions */}
+      <div className="p-4 border-t border-slate-200/60">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-full text-xs font-bold text-rose-700 hover:bg-rose-100/70 transition-all duration-200"
         >
           <LogOut size={18} />
-          <span>Logout</span>
+          <span>Sign Out</span>
         </button>
       </div>
     </aside>

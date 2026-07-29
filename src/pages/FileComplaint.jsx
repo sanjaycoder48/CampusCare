@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MessageSquare, AlertTriangle, Upload, X, ShieldAlert } from "lucide-react";
+import { MessageSquare, AlertTriangle, Upload, X, ShieldAlert, Sparkles } from "lucide-react";
 import { createComplaint, createEmergency } from "../api.js";
 import Toast from "../components/Toast.jsx";
 
@@ -109,33 +109,36 @@ export default function FileComplaint() {
   };
 
   return (
-    <div className="p-6 md:p-8 max-w-4xl mx-auto space-y-8">
+    <div className="p-6 md:p-10 max-w-4xl mx-auto space-y-8">
       <Toast toast={toast} onClose={() => setToast(null)} />
 
-      {/* Header */}
+      {/* M3 Title */}
       <div>
-        <h1 className="text-3xl font-bold text-neutral-900 tracking-tight flex items-center gap-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100/80 text-indigo-900 text-xs font-bold mb-2">
+          <Sparkles size={14} /> Material 3 Incident Console
+        </div>
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
           {mode === "emergency" ? (
             <AlertTriangle className="w-8 h-8 text-rose-600 animate-pulse" />
           ) : (
             <MessageSquare className="w-8 h-8 text-indigo-600" />
           )}
-          Issue & Emergency Reporting Portal
+          Issue & Emergency Reporting
         </h1>
-        <p className="text-neutral-500 mt-1">
+        <p className="text-slate-500 text-sm mt-1">
           File standard department complaints or broadcast immediate campus emergency alerts.
         </p>
       </div>
 
-      {/* Mode Switcher */}
-      <div className="flex bg-neutral-100 p-1.5 rounded-2xl border border-neutral-200 shadow-xs">
+      {/* M3 Segmented Button Group */}
+      <div className="flex bg-slate-200/60 p-1.5 rounded-full border border-slate-300/60">
         <button
           type="button"
           onClick={() => setMode("complaint")}
-          className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-3 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-2 ${
             mode === "complaint"
-              ? "bg-white text-indigo-700 shadow-md shadow-indigo-100"
-              : "text-neutral-600 hover:text-neutral-900"
+              ? "bg-indigo-600 text-white shadow-md shadow-indigo-200"
+              : "text-slate-700 hover:text-slate-950"
           }`}
         >
           <MessageSquare className="w-4 h-4" /> Standard Complaint
@@ -143,10 +146,10 @@ export default function FileComplaint() {
         <button
           type="button"
           onClick={() => setMode("emergency")}
-          className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-3 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-2 ${
             mode === "emergency"
               ? "bg-rose-600 text-white shadow-md shadow-rose-200"
-              : "text-rose-600 hover:bg-rose-50"
+              : "text-rose-700 hover:bg-rose-100/50"
           }`}
         >
           <AlertTriangle className="w-4 h-4" /> Urgent Emergency Alert
@@ -155,45 +158,45 @@ export default function FileComplaint() {
 
       {/* STANDARD COMPLAINT FORM */}
       {mode === "complaint" ? (
-        <form onSubmit={handleSubmitComplaint} className="bg-white rounded-3xl border border-neutral-200 p-6 md:p-8 space-y-6 shadow-xs">
+        <form onSubmit={handleSubmitComplaint} className="m3-card p-6 md:p-8 space-y-6">
           <div>
-            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Complaint Title *</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Complaint Title *</label>
             <input
               type="text"
               required
               placeholder="e.g. Broken AC dripping water in Library Silent Study Zone"
               value={complaintForm.title}
               onChange={e => setComplaintForm({ ...complaintForm, title: e.target.value })}
-              className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Department Category *</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Department Category *</label>
               <select
                 value={complaintForm.category}
                 onChange={e => setComplaintForm({ ...complaintForm, category: e.target.value })}
-                className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white"
               >
                 {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Priority Level *</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Priority Level *</label>
               <div className="grid grid-cols-4 gap-2">
                 {PRIORITIES.map(p => (
                   <button
                     type="button"
                     key={p}
                     onClick={() => setComplaintForm({ ...complaintForm, priority: p })}
-                    className={`py-2 rounded-xl text-xs font-bold border transition-all ${
+                    className={`py-2.5 rounded-full text-xs font-bold transition-all ${
                       complaintForm.priority === p
                         ? p === "Urgent" || p === "High"
-                          ? "bg-rose-600 text-white border-rose-600 shadow-xs"
-                          : "bg-indigo-600 text-white border-indigo-600 shadow-xs"
-                        : "bg-neutral-50 text-neutral-600 border-neutral-200 hover:bg-neutral-100"
+                          ? "bg-rose-600 text-white shadow-xs"
+                          : "bg-indigo-600 text-white shadow-xs"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200/60"
                     }`}
                   >
                     {p}
@@ -204,35 +207,35 @@ export default function FileComplaint() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Specific Campus Location *</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Specific Campus Location *</label>
             <input
               type="text"
               required
               placeholder="e.g. Block C, 3rd Floor Washroom / Hostel B Room 204"
               value={complaintForm.location}
               onChange={e => setComplaintForm({ ...complaintForm, location: e.target.value })}
-              className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Detailed Issue Description *</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Detailed Issue Description *</label>
             <textarea
               rows={4}
               required
               placeholder="Describe the issue, severity, and any hazards..."
               value={complaintForm.description}
               onChange={e => setComplaintForm({ ...complaintForm, description: e.target.value })}
-              className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white"
             />
           </div>
 
           {/* Photos */}
           <div>
-            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Photo Attachments (Max 4)</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Photo Attachments (Max 4)</label>
             <div className="flex items-center gap-3 flex-wrap">
               {complaintForm.photos.map((img, idx) => (
-                <div key={idx} className="w-20 h-20 bg-neutral-100 rounded-xl overflow-hidden relative group border border-neutral-200">
+                <div key={idx} className="w-20 h-20 bg-slate-100 rounded-2xl overflow-hidden relative group border border-slate-200">
                   <img src={img} alt="attachment" className="w-full h-full object-cover" />
                   <button
                     type="button"
@@ -245,9 +248,9 @@ export default function FileComplaint() {
               ))}
 
               {complaintForm.photos.length < 4 && (
-                <label className="w-20 h-20 rounded-xl border-2 border-dashed border-neutral-300 hover:border-indigo-500 bg-neutral-50 flex flex-col items-center justify-center cursor-pointer text-neutral-400 hover:text-indigo-600 transition-colors">
+                <label className="w-20 h-20 rounded-2xl border-2 border-dashed border-slate-300 hover:border-indigo-500 bg-slate-50 flex flex-col items-center justify-center cursor-pointer text-slate-400 hover:text-indigo-600 transition-colors">
                   <Upload className="w-5 h-5 mb-1" />
-                  <span className="text-[10px] font-semibold">Add Photo</span>
+                  <span className="text-[10px] font-bold">Add Photo</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -260,18 +263,18 @@ export default function FileComplaint() {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={() => navigate("/complaints")}
-              className="px-5 py-2.5 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-neutral-50"
+              className="m3-button-tonal"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
+              className="m3-button-filled"
             >
               {loading ? "Submitting..." : "Submit Complaint"}
             </button>
@@ -279,19 +282,19 @@ export default function FileComplaint() {
         </form>
       ) : (
         /* EMERGENCY ALERT FORM */
-        <form onSubmit={handleSubmitEmergency} className="bg-white rounded-3xl border-2 border-rose-200 p-6 md:p-8 space-y-6 shadow-md">
-          <div className="flex items-center gap-3 p-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-800 text-xs font-semibold leading-relaxed">
+        <form onSubmit={handleSubmitEmergency} className="m3-card border-2 border-rose-300 p-6 md:p-8 space-y-6">
+          <div className="flex items-center gap-3 p-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-900 text-xs font-semibold leading-relaxed">
             <ShieldAlert className="w-5 h-5 text-rose-600 flex-shrink-0" />
             <span>Emergency alerts notify campus security and quick response teams immediately. For immediate life-threatening situations, call emergency services (911/112) first.</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Emergency Type *</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Emergency Type *</label>
               <select
                 value={emergencyForm.type}
                 onChange={e => setEmergencyForm({ ...emergencyForm, type: e.target.value })}
-                className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm font-semibold text-neutral-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+                className="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
               >
                 <option value="Medical">Medical Emergency</option>
                 <option value="Security">Security Incident / Tailgating</option>
@@ -301,36 +304,36 @@ export default function FileComplaint() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Exact Campus Location *</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Exact Campus Location *</label>
               <input
                 type="text"
                 required
                 placeholder="e.g. Football Ground / Chemistry Lab 2"
                 value={emergencyForm.location}
                 onChange={e => setEmergencyForm({ ...emergencyForm, location: e.target.value })}
-                className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+                className="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Brief Incident Description *</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Brief Incident Description *</label>
             <textarea
               rows={4}
               required
               placeholder="Describe the urgent situation quickly..."
               value={emergencyForm.description}
               onChange={e => setEmergencyForm({ ...emergencyForm, description: e.target.value })}
-              className="w-full p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20"
+              className="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20"
             />
           </div>
 
           {/* Emergency Photo Attachments */}
           <div>
-            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Photo Proof (Optional, only if safe)</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Photo Proof (Optional, only if safe)</label>
             <div className="flex items-center gap-3 flex-wrap">
               {emergencyForm.photos.map((img, idx) => (
-                <div key={idx} className="w-20 h-20 bg-neutral-100 rounded-xl overflow-hidden relative group border border-neutral-200">
+                <div key={idx} className="w-20 h-20 bg-slate-100 rounded-2xl overflow-hidden relative group border border-slate-200">
                   <img src={img} alt="emergency attachment" className="w-full h-full object-cover" />
                   <button
                     type="button"
@@ -343,7 +346,7 @@ export default function FileComplaint() {
               ))}
 
               {emergencyForm.photos.length < 3 && (
-                <label className="w-20 h-20 rounded-xl border-2 border-dashed border-rose-300 hover:border-rose-500 bg-rose-50/50 flex flex-col items-center justify-center cursor-pointer text-rose-500 hover:bg-rose-100 transition-colors">
+                <label className="w-20 h-20 rounded-2xl border-2 border-dashed border-rose-300 hover:border-rose-500 bg-rose-50/50 flex flex-col items-center justify-center cursor-pointer text-rose-600 hover:bg-rose-100 transition-colors">
                   <Upload className="w-5 h-5 mb-1" />
                   <span className="text-[10px] font-bold">Add Photo</span>
                   <input
@@ -358,18 +361,18 @@ export default function FileComplaint() {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={() => navigate("/")}
-              className="px-5 py-2.5 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-neutral-50"
+              className="m3-button-tonal"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-md shadow-rose-200 transition-colors flex items-center gap-2"
+              className="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-xs font-bold shadow-md shadow-rose-200 transition-all flex items-center gap-2"
             >
               <AlertTriangle className="w-4 h-4" /> {loading ? "Broadcasting..." : "Broadcast Emergency Alert"}
             </button>

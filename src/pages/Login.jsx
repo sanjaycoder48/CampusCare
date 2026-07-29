@@ -32,55 +32,55 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
-      <div className="w-full max-w-[420px] bg-white border border-neutral-200/60 rounded-3xl p-8 sm:p-10 shadow-sm align-middle">
-        <div className="flex flex-col items-center text-center mb-10">
-          <div className="w-14 h-14 rounded-2xl bg-black flex items-center justify-center text-white mb-6 shadow-md shadow-black/10">
-            <Sparkles size={28} />
+    <div className="min-h-screen flex items-center justify-center bg-slate-100/80 px-4 select-none">
+      <div className="w-full max-w-[440px] bg-white border border-slate-200/80 rounded-[32px] p-8 sm:p-10 shadow-xl">
+        <div className="flex flex-col items-center text-center mb-8">
+          <div className="w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center text-white mb-4 shadow-lg shadow-indigo-200">
+            <Sparkles size={32} />
           </div>
-          <h1 className="text-2xl font-bold text-black tracking-tight mb-2">CampusCare</h1>
-          <p className="text-sm font-medium text-neutral-500">Sign in to report and track issues</p>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-1">CampusCare</h1>
+          <p className="text-xs font-bold text-indigo-600 uppercase tracking-widest">Material 3 Campus Platform</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-sm font-bold text-black tracking-tight">University ID</label>
+            <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">University ID *</label>
             <input
               type="text"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              placeholder="Enter your Student or Admin ID"
-              className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl text-black text-sm placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-neutral-300 transition-all font-medium"
+              placeholder="Enter Student or Admin ID"
+              className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 text-sm font-semibold placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-black tracking-tight flex justify-between">
-              Select Role
-            </label>
+            <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Select Access Role</label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => setRole("student")}
-                className={`flex flex-col items-center justify-center gap-2 py-4 rounded-xl border-2 transition-all ${role === "student"
-                    ? "border-black bg-black text-white shadow-md shadow-black/10"
-                    : "border-neutral-100 bg-white text-neutral-500 hover:border-neutral-200 hover:bg-neutral-50"
-                  }`}
+                className={`flex flex-col items-center justify-center gap-2 py-4 rounded-2xl border-2 transition-all ${
+                  role === "student"
+                    ? "border-indigo-600 bg-indigo-600 text-white shadow-md shadow-indigo-200"
+                    : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                }`}
               >
-                <User size={20} className={role === "student" ? "text-white" : "text-neutral-400"} />
-                <span className="text-sm font-bold">Student</span>
+                <User size={22} className={role === "student" ? "text-white" : "text-slate-400"} />
+                <span className="text-xs font-bold">Student Portal</span>
               </button>
               <button
                 type="button"
                 onClick={() => setRole("admin")}
-                className={`flex flex-col items-center justify-center gap-2 py-4 rounded-xl border-2 transition-all ${role === "admin"
-                    ? "border-black bg-black text-white shadow-md shadow-black/10"
-                    : "border-neutral-100 bg-white text-neutral-500 hover:border-neutral-200 hover:bg-neutral-50"
-                  }`}
+                className={`flex flex-col items-center justify-center gap-2 py-4 rounded-2xl border-2 transition-all ${
+                  role === "admin"
+                    ? "border-indigo-600 bg-indigo-600 text-white shadow-md shadow-indigo-200"
+                    : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                }`}
               >
-                <Shield size={20} className={role === "admin" ? "text-white" : "text-neutral-400"} />
-                <span className="text-sm font-bold">Admin</span>
+                <Shield size={22} className={role === "admin" ? "text-white" : "text-slate-400"} />
+                <span className="text-xs font-bold">Admin Portal</span>
               </button>
             </div>
           </div>
@@ -88,7 +88,7 @@ function Login() {
           <div className="pt-2">
             <button
               type="submit"
-              className="w-full px-4 py-3.5 bg-black text-white rounded-xl font-bold hover:bg-neutral-800 hover:shadow-lg hover:shadow-black/10 transition-all active:scale-[0.98]"
+              className="m3-button-filled w-full py-4 text-sm"
             >
               Continue to Dashboard
             </button>
@@ -100,4 +100,3 @@ function Login() {
 }
 
 export default Login;
-

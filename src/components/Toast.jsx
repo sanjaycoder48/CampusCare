@@ -4,34 +4,35 @@ import { CheckCircle2, AlertCircle, Info, X } from "lucide-react";
 export default function Toast({ toast, onClose }) {
   if (!toast) return null;
 
-  const { type = "info", message = "" } = toast;
+  const { type, message } = toast;
 
-  const typeStyles = {
-    success: "bg-emerald-50 text-emerald-800 border-emerald-200 icon-emerald",
-    error: "bg-rose-50 text-rose-800 border-rose-200 icon-rose",
-    info: "bg-indigo-50 text-indigo-800 border-indigo-200 icon-indigo",
-  };
+  let bg = "bg-slate-900 text-white";
+  let icon = <Info className="w-5 h-5 text-sky-400" />;
 
-  const IconComponent =
-    type === "success" ? CheckCircle2 : type === "error" ? AlertCircle : Info;
+  if (type === "success") {
+    bg = "bg-slate-900 text-white border border-emerald-500/30";
+    icon = <CheckCircle2 className="w-5 h-5 text-emerald-400" />;
+  } else if (type === "error") {
+    bg = "bg-slate-900 text-white border border-rose-500/30";
+    icon = <AlertCircle className="w-5 h-5 text-rose-400" />;
+  } else if (type === "info") {
+    bg = "bg-slate-900 text-white border border-indigo-500/30";
+    icon = <Info className="w-5 h-5 text-indigo-400" />;
+  }
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 animate-bounce-in max-w-md w-full px-4">
-      <div
-        className={`flex items-center justify-between p-4 rounded-xl border shadow-lg backdrop-blur-md transition-all ${
-          typeStyles[type] || typeStyles.info
-        }`}
-      >
-        <div className="flex items-center gap-3">
-          <IconComponent className="w-5 h-5 flex-shrink-0" />
-          <span className="text-sm font-medium leading-snug">{message}</span>
-        </div>
-        <button
-          onClick={onClose}
-          className="p-1 text-neutral-400 hover:text-neutral-700 rounded-md transition-colors"
-        >
-          <X className="w-4 h-4" />
-        </button>
+    <div className="fixed bottom-6 right-6 z-50 animate-in fade-in slide-in-from-bottom-2">
+      <div className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-xl max-w-md ${bg}`}>
+        {icon}
+        <span className="text-xs font-semibold tracking-wide leading-relaxed">{message}</span>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="p-1 text-slate-400 hover:text-white rounded-full hover:bg-slate-800 transition-colors ml-auto"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
     </div>
   );

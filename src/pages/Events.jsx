@@ -120,38 +120,40 @@ export default function Events() {
   });
 
   return (
-    <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-8">
+    <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-8">
       <Toast toast={toast} onClose={() => setToast(null)} />
 
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-neutral-900 tracking-tight flex items-center gap-3">
-            <Sparkles className="w-8 h-8 text-indigo-600" />
-            Events & Clubs Hub
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100/80 text-indigo-900 text-xs font-bold mb-2">
+            <Sparkles size={14} /> Material 3 Activities Hub
+          </div>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            Events & Student Clubs
           </h1>
-          <p className="text-neutral-500 mt-1">
-            Explore department events, register for upcoming activities, and join student clubs.
+          <p className="text-slate-500 text-sm mt-1">
+            Explore department events, register for hackathons, and join campus societies.
           </p>
         </div>
 
-        <div className="flex bg-neutral-100 p-1.5 rounded-xl self-start md:self-auto border border-neutral-200">
+        <div className="flex bg-slate-200/60 p-1.5 rounded-full border border-slate-300/60 self-start md:self-auto">
           <button
             onClick={() => setActiveTab("events")}
-            className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
+            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${
               activeTab === "events"
-                ? "bg-white text-indigo-600 shadow-xs"
-                : "text-neutral-600 hover:text-neutral-900"
+                ? "bg-indigo-600 text-white shadow-xs"
+                : "text-slate-700 hover:text-slate-950"
             }`}
           >
             Campus Events
           </button>
           <button
             onClick={() => setActiveTab("clubs")}
-            className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
+            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${
               activeTab === "clubs"
-                ? "bg-white text-indigo-600 shadow-xs"
-                : "text-neutral-600 hover:text-neutral-900"
+                ? "bg-indigo-600 text-white shadow-xs"
+                : "text-slate-700 hover:text-slate-950"
             }`}
           >
             Department Clubs
@@ -159,19 +161,19 @@ export default function Events() {
         </div>
       </div>
 
-      {/* Department Filter Bar */}
+      {/* M3 Department Filter Chips */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-        <span className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mr-2 flex items-center gap-1">
+        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2 flex items-center gap-1">
           <Filter className="w-3.5 h-3.5" /> Department:
         </span>
         {DEPARTMENTS.map(dept => (
           <button
             key={dept}
             onClick={() => setSelectedDept(dept)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+            className={`m3-chip ${
               selectedDept === dept
-                ? "bg-indigo-600 text-white shadow-md shadow-indigo-100"
-                : "bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-50"
+                ? "m3-chip-filter-active"
+                : "m3-chip-filter"
             }`}
           >
             {dept}
@@ -179,27 +181,27 @@ export default function Events() {
         ))}
       </div>
 
-      {/* Search & Category Bar */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white p-4 rounded-2xl border border-neutral-200 shadow-xs">
+      {/* Search & Category Filter */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 m3-card p-4">
         <div className="relative md:col-span-1">
-          <Search className="w-4 h-4 absolute left-3.5 top-3 text-neutral-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
           <input
             type="text"
             placeholder={activeTab === "events" ? "Search events..." : "Search clubs..."}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-neutral-50 rounded-xl text-sm border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-medium"
+            className="w-full m3-search-bar"
           />
         </div>
 
         {activeTab === "events" && (
           <>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-neutral-500 whitespace-nowrap">Category:</span>
+              <span className="text-xs font-bold text-slate-500 whitespace-nowrap">Category:</span>
               <select
                 value={selectedCategory}
                 onChange={e => setSelectedCategory(e.target.value)}
-                className="w-full py-2 px-3 bg-neutral-50 rounded-xl text-sm border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full p-2.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
               >
                 {CATEGORIES.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -207,27 +209,27 @@ export default function Events() {
               </select>
             </div>
 
-            <div className="flex bg-neutral-100 p-1 rounded-xl">
+            <div className="flex bg-slate-100 p-1 rounded-full border border-slate-200">
               <button
                 onClick={() => setEventTimeFilter("upcoming")}
-                className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  eventTimeFilter === "upcoming" ? "bg-white text-neutral-900 shadow-xs" : "text-neutral-500"
+                className={`flex-1 py-1.5 rounded-full text-xs font-bold transition-all ${
+                  eventTimeFilter === "upcoming" ? "bg-white text-slate-900 shadow-xs" : "text-slate-500"
                 }`}
               >
                 Upcoming
               </button>
               <button
                 onClick={() => setEventTimeFilter("past")}
-                className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  eventTimeFilter === "past" ? "bg-white text-neutral-900 shadow-xs" : "text-neutral-500"
+                className={`flex-1 py-1.5 rounded-full text-xs font-bold transition-all ${
+                  eventTimeFilter === "past" ? "bg-white text-slate-900 shadow-xs" : "text-slate-500"
                 }`}
               >
-                Past Events
+                Past
               </button>
               <button
                 onClick={() => setEventTimeFilter("all")}
-                className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  eventTimeFilter === "all" ? "bg-white text-neutral-900 shadow-xs" : "text-neutral-500"
+                className={`flex-1 py-1.5 rounded-full text-xs font-bold transition-all ${
+                  eventTimeFilter === "all" ? "bg-white text-slate-900 shadow-xs" : "text-slate-500"
                 }`}
               >
                 All
@@ -238,13 +240,13 @@ export default function Events() {
       </div>
 
       {loading ? (
-        <div className="py-20 text-center text-neutral-400">Loading events...</div>
+        <div className="py-20 text-center text-slate-400 font-medium">Loading activities...</div>
       ) : activeTab === "events" ? (
         filteredEvents.length === 0 ? (
-          <div className="py-16 text-center bg-white rounded-2xl border border-neutral-200 p-8 space-y-3">
-            <Calendar className="w-12 h-12 text-neutral-300 mx-auto" />
-            <h3 className="text-base font-semibold text-neutral-700">No Events Found</h3>
-            <p className="text-sm text-neutral-400">Try adjusting your filters.</p>
+          <div className="py-16 text-center m3-card p-8 space-y-3">
+            <Calendar className="w-12 h-12 text-slate-300 mx-auto" />
+            <h3 className="text-base font-bold text-slate-700">No Events Found</h3>
+            <p className="text-sm text-slate-400">Try adjusting your category or department filters.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -256,93 +258,91 @@ export default function Events() {
               return (
                 <div
                   key={event.id}
-                  className="bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
+                  className="m3-card-interactive overflow-hidden flex flex-col justify-between group"
                 >
-                  <div className="h-44 bg-neutral-100 relative overflow-hidden">
-                    <img
-                      src={event.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=60"}
-                      alt={event.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-3 left-3 flex gap-2">
-                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-white/90 backdrop-blur-md text-neutral-800 shadow-xs">
-                        {event.department || "General"}
-                      </span>
-                      <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-600/90 backdrop-blur-md text-white shadow-xs">
-                        {event.category}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                    <div className="space-y-2">
-                      <h3 className="font-bold text-neutral-900 text-lg group-hover:text-indigo-600 transition-colors line-clamp-1">
-                        {event.title}
-                      </h3>
-                      <p className="text-sm text-neutral-500 line-clamp-2 leading-relaxed">
-                        {event.description}
-                      </p>
-                    </div>
-
-                    <div className="space-y-2 text-xs text-neutral-600 border-t border-neutral-100 pt-3">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-3.5 h-3.5 text-indigo-500" />
-                        <span>{event.date} at {event.time || "10:00 AM"}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-3.5 h-3.5 text-indigo-500" />
-                        <span className="truncate">{event.venue}</span>
-                      </div>
-                      <div className="flex items-center justify-between pt-1">
-                        <span className="flex items-center gap-1 text-neutral-500">
-                          <Users className="w-3.5 h-3.5" />
-                          {event.registeredCount || 0} / {event.maxParticipants || 100} Registered
+                  <div>
+                    <div className="h-48 bg-slate-100 relative overflow-hidden">
+                      <img
+                        src={event.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=60"}
+                        alt={event.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute top-3 left-3 flex gap-2">
+                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/95 backdrop-blur-md text-slate-900 shadow-xs">
+                          {event.department || "General"}
+                        </span>
+                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-600 text-white shadow-xs">
+                          {event.category}
                         </span>
                       </div>
                     </div>
 
-                    <div className="pt-2 flex items-center gap-2">
-                      <button
-                        onClick={() => setSelectedEvent(event)}
-                        className="flex-1 py-2 px-3 text-xs font-semibold border border-neutral-200 hover:bg-neutral-50 rounded-xl text-neutral-700 transition-colors text-center"
-                      >
-                        Details
-                      </button>
+                    <div className="p-6 space-y-3">
+                      <h3 className="font-bold text-slate-900 text-lg group-hover:text-indigo-600 transition-colors line-clamp-1">
+                        {event.title}
+                      </h3>
+                      <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                        {event.description}
+                      </p>
 
-                      {isPast ? (
-                        isRegistered ? (
-                          <button
-                            onClick={() => setCertificateModalEvent(event)}
-                            className="flex-1 py-2 px-3 text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-xl transition-colors flex items-center justify-center gap-1.5"
-                          >
-                            <Award className="w-3.5 h-3.5" /> Certificate
-                          </button>
-                        ) : (
-                          <span className="px-3 py-2 text-xs font-medium text-neutral-400 bg-neutral-100 rounded-xl text-center flex-1">
-                            Event Ended
+                      <div className="space-y-2 text-xs text-slate-600 border-t border-slate-100 pt-3">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+                          <span>{event.date} at {event.time || "10:00 AM"}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-3.5 h-3.5 text-indigo-600" />
+                          <span className="truncate">{event.venue}</span>
+                        </div>
+                        <div className="flex items-center justify-between pt-1">
+                          <span className="flex items-center gap-1 text-slate-500 font-medium">
+                            <Users className="w-3.5 h-3.5" />
+                            {event.registeredCount || 0} / {event.maxParticipants || 100} Registered
                           </span>
-                        )
-                      ) : isRegistered ? (
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-6 pt-0 flex items-center gap-2">
+                    <button
+                      onClick={() => setSelectedEvent(event)}
+                      className="m3-button-tonal flex-1 text-xs py-2"
+                    >
+                      Details
+                    </button>
+
+                    {isPast ? (
+                      isRegistered ? (
                         <button
-                          onClick={() => handleCancelRegistration(event.id)}
-                          className="flex-1 py-2 px-3 text-xs font-semibold bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-xl transition-colors text-center"
+                          onClick={() => setCertificateModalEvent(event)}
+                          className="px-4 py-2 bg-emerald-100 text-emerald-950 hover:bg-emerald-200 rounded-full text-xs font-bold transition-all flex items-center gap-1"
                         >
-                          Cancel
+                          <Award className="w-3.5 h-3.5" /> Certificate
                         </button>
                       ) : (
-                        <button
-                          onClick={() => handleRegister(event.id)}
-                          disabled={isFull}
-                          className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-colors text-center ${
-                            isFull
-                              ? "bg-neutral-100 text-neutral-400 cursor-not-allowed"
-                              : "bg-indigo-600 text-white hover:bg-indigo-700 shadow-xs"
-                          }`}
-                        >
-                          Register
-                        </button>
-                      )}
-                    </div>
+                        <span className="px-3 py-2 text-xs font-medium text-slate-400 bg-slate-100 rounded-full text-center flex-1">
+                          Ended
+                        </span>
+                      )
+                    ) : isRegistered ? (
+                      <button
+                        onClick={() => handleCancelRegistration(event.id)}
+                        className="px-4 py-2 bg-rose-100 text-rose-950 hover:bg-rose-200 rounded-full text-xs font-bold transition-all flex-1 text-center"
+                      >
+                        Cancel
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleRegister(event.id)}
+                        disabled={isFull}
+                        className={`m3-button-filled flex-1 text-xs py-2 ${
+                          isFull ? "bg-slate-200 text-slate-400 cursor-not-allowed" : ""
+                        }`}
+                      >
+                        Register
+                      </button>
+                    )}
                   </div>
                 </div>
               );
@@ -357,45 +357,45 @@ export default function Events() {
             return (
               <div
                 key={club.id}
-                className="bg-white rounded-2xl border border-neutral-200 p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+                className="m3-card p-6 flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-950">
                       {club.department} Dept
                     </span>
-                    <span className="text-xs font-medium text-neutral-500 flex items-center gap-1">
-                      <Users className="w-3.5 h-3.5 text-neutral-400" />
+                    <span className="text-xs font-semibold text-slate-500 flex items-center gap-1">
+                      <Users className="w-3.5 h-3.5" />
                       {club.membersCount || (club.members || []).length} Members
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-neutral-900">{club.name}</h3>
-                  <p className="text-sm text-neutral-600 leading-relaxed line-clamp-3">
+                  <h3 className="text-xl font-bold text-slate-900">{club.name}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
                     {club.description}
                   </p>
 
-                  <div className="text-xs text-neutral-500 pt-2 border-t border-neutral-100 flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-indigo-500" />
-                    <span>Coordinator: <strong className="text-neutral-700">{club.coordinator}</strong></span>
+                  <div className="text-xs text-slate-500 pt-2 border-t border-slate-100 flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>Coordinator: <strong className="text-slate-800">{club.coordinator}</strong></span>
                   </div>
                 </div>
 
                 <div className="pt-2 flex items-center gap-2">
                   <button
                     onClick={() => setSelectedClub(club)}
-                    className="flex-1 py-2 px-3 text-xs font-semibold border border-neutral-200 hover:bg-neutral-50 rounded-xl text-neutral-700 transition-colors"
+                    className="m3-button-tonal flex-1 text-xs py-2"
                   >
                     Announcements ({club.announcements?.length || 0})
                   </button>
                   {isJoined ? (
-                    <span className="px-3 py-2 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-xl border border-emerald-200">
+                    <span className="px-4 py-2 text-xs font-bold text-emerald-950 bg-emerald-100 rounded-full">
                       Joined
                     </span>
                   ) : (
                     <button
                       onClick={() => handleJoinClub(club.id)}
-                      className="py-2 px-4 text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 rounded-xl transition-colors shadow-xs"
+                      className="m3-button-filled text-xs py-2"
                     >
                       Join Club
                     </button>
@@ -415,7 +415,7 @@ export default function Events() {
           title={selectedEvent.title}
         >
           <div className="space-y-6">
-            <div className="h-56 bg-neutral-100 rounded-xl overflow-hidden relative">
+            <div className="h-56 bg-slate-100 rounded-2xl overflow-hidden">
               <img
                 src={selectedEvent.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=60"}
                 alt={selectedEvent.title}
@@ -424,29 +424,29 @@ export default function Events() {
             </div>
 
             <div className="space-y-2">
-              <h4 className="text-sm font-semibold text-neutral-400 uppercase tracking-wider">Description</h4>
-              <p className="text-sm text-neutral-700 leading-relaxed">{selectedEvent.description}</p>
+              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Description</h4>
+              <p className="text-sm text-slate-700 leading-relaxed">{selectedEvent.description}</p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 bg-neutral-50 p-4 rounded-xl text-xs">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-2xl text-xs">
               <div>
-                <span className="text-neutral-400 block mb-0.5">Date & Time</span>
-                <span className="font-semibold text-neutral-800">{selectedEvent.date} at {selectedEvent.time || "10:00 AM"}</span>
+                <span className="text-slate-400 block mb-0.5">Date & Time</span>
+                <span className="font-bold text-slate-900">{selectedEvent.date} at {selectedEvent.time || "10:00 AM"}</span>
               </div>
               <div>
-                <span className="text-neutral-400 block mb-0.5">Venue</span>
-                <span className="font-semibold text-neutral-800">{selectedEvent.venue}</span>
+                <span className="text-slate-400 block mb-0.5">Venue</span>
+                <span className="font-bold text-slate-900">{selectedEvent.venue}</span>
               </div>
               <div>
-                <span className="text-neutral-400 block mb-0.5">Coordinator</span>
-                <span className="font-semibold text-neutral-800">{selectedEvent.coordinator}</span>
+                <span className="text-slate-400 block mb-0.5">Coordinator</span>
+                <span className="font-bold text-slate-900">{selectedEvent.coordinator}</span>
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-neutral-100">
+            <div className="flex justify-end pt-4 border-t border-slate-100">
               <button
                 onClick={() => setSelectedEvent(null)}
-                className="px-4 py-2 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-700 hover:bg-neutral-50"
+                className="m3-button-tonal"
               >
                 Close
               </button>
@@ -464,22 +464,22 @@ export default function Events() {
         >
           <div className="space-y-4">
             {(selectedClub.announcements || []).length === 0 ? (
-              <p className="text-xs text-neutral-400 italic">No announcements published yet.</p>
+              <p className="text-xs text-slate-400 italic">No announcements published yet.</p>
             ) : (
               selectedClub.announcements.map(ann => (
-                <div key={ann.id} className="p-3 bg-white border border-neutral-200 rounded-xl space-y-1">
+                <div key={ann.id} className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-1">
                   <div className="flex items-center justify-between">
-                    <h5 className="font-semibold text-sm text-neutral-900">{ann.title}</h5>
-                    <span className="text-[10px] text-neutral-400">{ann.date}</span>
+                    <h5 className="font-bold text-sm text-slate-900">{ann.title}</h5>
+                    <span className="text-[10px] text-slate-400 font-semibold">{ann.date}</span>
                   </div>
-                  <p className="text-xs text-neutral-600">{ann.content}</p>
+                  <p className="text-xs text-slate-600">{ann.content}</p>
                 </div>
               ))
             )}
-            <div className="flex justify-end pt-4 border-t border-neutral-100">
+            <div className="flex justify-end pt-4 border-t border-slate-100">
               <button
                 onClick={() => setSelectedClub(null)}
-                className="px-4 py-2 border border-neutral-200 rounded-xl text-xs font-semibold text-neutral-700"
+                className="m3-button-tonal"
               >
                 Close
               </button>
@@ -495,11 +495,11 @@ export default function Events() {
           onClose={() => setCertificateModalEvent(null)}
           title="Official Certificate of Completion"
         >
-          <div className="p-6 bg-gradient-to-br from-amber-50/50 via-white to-indigo-50/50 border-4 border-double border-amber-300 rounded-2xl text-center space-y-4">
+          <div className="p-8 bg-gradient-to-br from-amber-50/60 via-white to-indigo-50/60 border-4 border-double border-amber-300 rounded-[28px] text-center space-y-4 shadow-sm">
             <Award className="w-16 h-16 text-amber-500 mx-auto" />
-            <h2 className="text-xl font-serif font-bold text-neutral-900 tracking-wide uppercase">Certificate of Participation</h2>
-            <p className="text-xs text-neutral-600">This certifies that <strong className="text-indigo-700">{userEmail}</strong> participated in</p>
-            <p className="text-sm font-bold text-neutral-900">{certificateModalEvent.title}</p>
+            <h2 className="text-xl font-serif font-bold text-slate-900 tracking-wide uppercase">Certificate of Participation</h2>
+            <p className="text-xs text-slate-600">This certifies that <strong className="text-indigo-700">{userEmail}</strong> participated in</p>
+            <p className="text-sm font-extrabold text-slate-900">{certificateModalEvent.title}</p>
           </div>
         </Modal>
       )}
