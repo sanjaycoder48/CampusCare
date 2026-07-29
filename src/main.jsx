@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { SpeedInsights } from "@vercel/speed-insights/react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -47,8 +46,9 @@ createRoot(document.getElementById("root")).render(
           <Route path="honours-minors" element={<AdminHonoursMinors />} />
           <Route path="syllabus" element={<AdminSyllabus />} />
         </Route>
+        {/* Catch-all fallback route to prevent blank screens */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
-    <SpeedInsights />
   </StrictMode>
 );
