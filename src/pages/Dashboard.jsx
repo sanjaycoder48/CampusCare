@@ -90,42 +90,38 @@ function Dashboard() {
   return (
     <div className="p-4 sm:p-6 md:p-8 lg:p-10 max-w-[1400px] mx-auto space-y-8 animate-in fade-in duration-300">
 
-      {/* ─── Hero Banner ─── */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-neutral-950 via-neutral-900 to-neutral-950 text-white rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-neutral-800">
-        {/* Subtle Ambient Background Gradients */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-neutral-700/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 left-1/3 w-80 h-80 bg-neutral-600/10 rounded-full blur-2xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-2.5 max-w-2xl">
+      {/* ─── Simple & Attractive Header ─── */}
+      <div className="bg-white border border-neutral-200/80 rounded-2xl p-6 sm:p-7 shadow-xs">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-900/90 border border-neutral-800 text-[11px] font-bold text-neutral-300 backdrop-blur-sm">
-                <Radio size={12} className="text-emerald-400 animate-pulse" /> Live Campus Network
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-[11px] font-bold text-emerald-800">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live Campus Network
               </span>
               <span className="text-xs text-neutral-400 font-medium">
                 {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
-              {getGreeting()}, <span className="text-neutral-300">Student</span> 👋
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900">
+              {getGreeting()}, <span className="text-neutral-600 font-bold">Student</span> 👋
             </h1>
 
-            <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed font-normal max-w-xl">
-              Your unified student portal. Manage campus tickets, monitor mess crowd status, access course syllabus guides, and submit incident logs.
+            <p className="text-xs sm:text-sm text-neutral-500 font-normal leading-relaxed">
+              Manage your support complaints, check mess crowd status, access course guides, and dispatch emergency alerts.
             </p>
           </div>
 
           <div className="flex items-center gap-3 shrink-0 flex-wrap">
             <button
               onClick={() => navigate("/file-complaint")}
-              className="flex items-center gap-2 px-5 py-3 bg-white text-neutral-950 text-xs font-black rounded-xl hover:bg-neutral-100 shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.98]"
+              className="flex items-center gap-2 px-4.5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl shadow-xs transition-all active:scale-[0.98]"
             >
               <PenLine size={15} /> File New Complaint
             </button>
             <button
               onClick={() => navigate("/file-complaint")}
-              className="flex items-center gap-2 px-4 py-3 bg-rose-600 hover:bg-rose-500 text-white text-xs font-extrabold rounded-xl border border-rose-500/30 shadow-md shadow-rose-950/40 transition-all duration-200 active:scale-[0.98]"
+              className="flex items-center gap-2 px-4 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-xl border border-rose-200/80 transition-all active:scale-[0.98]"
             >
               <AlertTriangle size={15} /> SOS Dispatch
             </button>
