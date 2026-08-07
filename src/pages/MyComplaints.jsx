@@ -118,9 +118,6 @@ export default function MyComplaints() {
       <Toast toast={toast} onClose={() => setToast(null)} />
 
       <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100/80 text-indigo-900 text-xs font-bold mb-2">
-          <Sparkles size={14} /> Material 3 Resolution Tracker
-        </div>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
           My Complaints & Active Cases
         </h1>

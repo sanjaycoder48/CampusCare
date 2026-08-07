@@ -60,9 +60,6 @@ export default function Syllabus() {
 
       {/* Header */}
       <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 text-sky-950 text-xs font-bold mb-2">
-          <Sparkles size={14} /> Material 3 Academic Directory
-        </div>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
           Subject Academic Syllabus
         </h1>

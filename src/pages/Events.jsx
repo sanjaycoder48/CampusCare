@@ -126,9 +126,6 @@ export default function Events() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100/80 text-indigo-900 text-xs font-bold mb-2">
-            <Sparkles size={14} /> Material 3 Activities Hub
-          </div>
           <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
             Events & Student Clubs
           </h1>

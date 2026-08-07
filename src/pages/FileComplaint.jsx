@@ -112,11 +112,7 @@ export default function FileComplaint() {
     <div className="p-6 md:p-10 max-w-4xl mx-auto space-y-8">
       <Toast toast={toast} onClose={() => setToast(null)} />
 
-      {/* M3 Title */}
       <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100/80 text-indigo-900 text-xs font-bold mb-2">
-          <Sparkles size={14} /> Material 3 Incident Console
-        </div>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
           {mode === "emergency" ? (
             <AlertTriangle className="w-8 h-8 text-rose-600 animate-pulse" />
