@@ -131,7 +131,7 @@ export default function AdminEvents() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-neutral-900 tracking-tight flex items-center gap-3">
-            <Sparkles className="w-8 h-8 text-indigo-600" />
+            <Sparkles className="w-8 h-8 text-neutral-600" />
             Events & Clubs Admin Portal
           </h1>
           <p className="text-neutral-500 mt-1">
@@ -144,7 +144,7 @@ export default function AdminEvents() {
             <button
               onClick={() => setActiveTab("events")}
               className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === "events" ? "bg-white text-indigo-600 shadow-xs" : "text-neutral-600"
+                activeTab === "events" ? "bg-white text-neutral-900 shadow-xs" : "text-neutral-600"
               }`}
             >
               Events ({events.length})
@@ -152,7 +152,7 @@ export default function AdminEvents() {
             <button
               onClick={() => setActiveTab("clubs")}
               className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === "clubs" ? "bg-white text-indigo-600 shadow-xs" : "text-neutral-600"
+                activeTab === "clubs" ? "bg-white text-neutral-900 shadow-xs" : "text-neutral-600"
               }`}
             >
               Clubs ({clubs.length})
@@ -162,14 +162,14 @@ export default function AdminEvents() {
           {activeTab === "events" ? (
             <button
               onClick={() => setIsEventModalOpen(true)}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-2"
+              className="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-2"
             >
               <Plus className="w-4 h-4" /> Create Event
             </button>
           ) : (
             <button
               onClick={() => setIsClubModalOpen(true)}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-2"
+              className="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-2"
             >
               <Plus className="w-4 h-4" /> Create Club
             </button>
@@ -184,7 +184,7 @@ export default function AdminEvents() {
           {events.map(event => (
             <div key={event.id} className="bg-white rounded-2xl border border-neutral-200 p-5 space-y-4 shadow-xs hover:shadow-md transition-all">
               <div className="flex items-center justify-between">
-                <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-neutral-100 text-neutral-700 border border-neutral-200">
                   {event.department} Dept
                 </span>
                 <span className="text-xs text-neutral-400 font-medium">{event.category}</span>
@@ -195,15 +195,15 @@ export default function AdminEvents() {
 
               <div className="text-xs text-neutral-600 space-y-1.5 pt-2 border-t border-neutral-100">
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-3.5 h-3.5 text-indigo-500" />
+                  <Calendar className="w-3.5 h-3.5 text-neutral-400" />
                   <span>{event.date} at {event.time}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-indigo-500" />
+                  <MapPin className="w-3.5 h-3.5 text-neutral-400" />
                   <span>{event.venue}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users className="w-3.5 h-3.5 text-indigo-500" />
+                  <Users className="w-3.5 h-3.5 text-neutral-400" />
                   <span>{event.registeredCount || 0} / {event.maxParticipants || 100} Registered</span>
                 </div>
               </div>
@@ -224,7 +224,7 @@ export default function AdminEvents() {
           {clubs.map(club => (
             <div key={club.id} className="bg-white rounded-2xl border border-neutral-200 p-5 space-y-4 shadow-xs">
               <div className="flex items-center justify-between">
-                <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700">
+                <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-neutral-100 text-neutral-700">
                   {club.department} Dept
                 </span>
                 <span className="text-xs text-neutral-500">{club.membersCount || 0} Members</span>
@@ -237,7 +237,7 @@ export default function AdminEvents() {
 
               <button
                 onClick={() => setAnnouncementModalClub(club)}
-                className="w-full py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
+                className="w-full py-2 bg-neutral-100 text-neutral-700 hover:bg-neutral-200 rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
               >
                 <Megaphone className="w-3.5 h-3.5" /> Publish Announcement
               </button>
@@ -257,7 +257,7 @@ export default function AdminEvents() {
               placeholder="e.g. AI & Cloud Hackathon 2026"
               value={eventForm.title}
               onChange={e => setEventForm({ ...eventForm, title: e.target.value })}
-              className="w-full p-2.5 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full p-2.5 bg-neutral-50 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
             />
           </div>
 
@@ -373,7 +373,7 @@ export default function AdminEvents() {
             </button>
             <button
               type="submit"
-              className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs"
+              className="px-5 py-2 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-semibold shadow-xs"
             >
               Create Event
             </button>
@@ -438,7 +438,7 @@ export default function AdminEvents() {
             </button>
             <button
               type="submit"
-              className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs"
+              className="px-5 py-2 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-semibold shadow-xs"
             >
               Create Club
             </button>
@@ -487,7 +487,7 @@ export default function AdminEvents() {
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs"
+                className="px-5 py-2 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-semibold shadow-xs"
               >
                 Publish
               </button>

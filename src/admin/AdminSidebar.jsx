@@ -31,21 +31,21 @@ export default function AdminSidebar({ onClose }) {
   ];
 
   return (
-    <aside className="w-64 bg-neutral-900 text-white flex flex-col h-screen sticky top-0 shadow-lg">
-      <div className="p-6 border-b border-neutral-800 flex items-center justify-between">
+    <aside className="w-64 bg-white border-r border-neutral-200/80 flex flex-col h-screen sticky top-0 shadow-xs">
+      <div className="p-6 border-b border-neutral-100 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-black font-black text-lg shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-black flex items-center justify-center text-white shadow-md shadow-black/10">
             <ShieldAlert size={18} />
           </div>
           <div>
-            <div className="font-bold text-white leading-tight">CampusCare</div>
-            <div className="text-[11px] text-neutral-400 font-semibold uppercase tracking-wider">Admin Portal</div>
+            <div className="font-bold text-neutral-900 leading-tight">CampusCare</div>
+            <div className="text-[11px] text-neutral-400 font-medium">Admin Portal</div>
           </div>
         </div>
         {onClose && (
           <button
             onClick={onClose}
-            className="md:hidden p-1.5 text-neutral-400 hover:text-white rounded-lg"
+            className="md:hidden p-1.5 text-neutral-400 hover:text-neutral-700 rounded-lg"
           >
             <X size={20} />
           </button>
@@ -64,8 +64,8 @@ export default function AdminSidebar({ onClose }) {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                   isActive
-                    ? "bg-white text-black font-bold shadow-md"
-                    : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
+                    ? "bg-neutral-900 text-white font-bold shadow-sm"
+                    : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
                 }`
               }
             >
@@ -76,10 +76,10 @@ export default function AdminSidebar({ onClose }) {
         })}
       </nav>
 
-      <div className="p-4 border-t border-neutral-800">
+      <div className="p-4 border-t border-neutral-100">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-950/40 transition-colors"
+          className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
         >
           <LogOut size={18} />
           <span>Exit Admin</span>

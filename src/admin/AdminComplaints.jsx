@@ -154,7 +154,7 @@ export default function AdminComplaints() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-neutral-900 tracking-tight flex items-center gap-3">
-            <BarChart3 className="w-8 h-8 text-indigo-600" />
+            <BarChart3 className="w-8 h-8 text-neutral-600" />
             Admin Complaint Operations & Analytics
           </h1>
           <p className="text-neutral-500 mt-1">
@@ -189,8 +189,8 @@ export default function AdminComplaints() {
           <div className="text-2xl font-bold text-amber-700 mt-1">{pendingCount}</div>
         </div>
         <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-xs">
-          <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wider">In Progress / Assigned</span>
-          <div className="text-2xl font-bold text-indigo-700 mt-1">{inProgressCount}</div>
+          <span className="text-xs font-semibold text-neutral-600 uppercase tracking-wider">In Progress / Assigned</span>
+          <div className="text-2xl font-bold text-neutral-900 mt-1">{inProgressCount}</div>
         </div>
         <div className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-xs">
           <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Resolved / Closed</span>
@@ -207,7 +207,7 @@ export default function AdminComplaints() {
             placeholder="Search title, staff..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-neutral-50 rounded-xl text-sm border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full pl-10 pr-4 py-2 bg-neutral-50 rounded-xl text-sm border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
           />
         </div>
 
@@ -293,7 +293,7 @@ export default function AdminComplaints() {
                     <td className="p-4 text-right">
                       <button
                         onClick={() => openEditModal(comp)}
-                        className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs"
+                        className="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-semibold shadow-xs"
                       >
                         Manage & Assign
                       </button>
@@ -387,7 +387,7 @@ export default function AdminComplaints() {
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs"
+                className="px-5 py-2 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-semibold shadow-xs"
               >
                 Save Changes & Notify
               </button>

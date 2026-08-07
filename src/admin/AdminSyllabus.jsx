@@ -94,7 +94,7 @@ export default function AdminSyllabus() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-neutral-900 tracking-tight flex items-center gap-3">
-            <BookOpen className="w-8 h-8 text-indigo-600" />
+            <BookOpen className="w-8 h-8 text-neutral-600" />
             Academic Syllabus Management
           </h1>
           <p className="text-neutral-500 mt-1">
@@ -104,7 +104,7 @@ export default function AdminSyllabus() {
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-1.5 self-start md:self-auto"
+          className="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center gap-1.5 self-start md:self-auto"
         >
           <Plus className="w-4 h-4" /> Add Subject Syllabus
         </button>
@@ -130,7 +130,7 @@ export default function AdminSyllabus() {
                 {syllabusList.map(s => (
                   <tr key={s.id} className="hover:bg-neutral-50/50">
                     <td className="p-4">
-                      <div className="font-bold text-indigo-600">{s.code}</div>
+                      <div className="font-bold text-neutral-900">{s.code}</div>
                       <div className="font-semibold text-neutral-900">{s.name}</div>
                     </td>
                     <td className="p-4 text-neutral-600">{s.department}</td>
@@ -253,7 +253,7 @@ export default function AdminSyllabus() {
             </button>
             <button
               type="submit"
-              className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs"
+              className="px-5 py-2 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-semibold shadow-xs"
             >
               Save Subject Syllabus
             </button>

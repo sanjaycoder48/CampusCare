@@ -66,7 +66,7 @@ export default function AdminLostFound() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-neutral-900 tracking-tight flex items-center gap-3">
-          <ShieldCheck className="w-8 h-8 text-indigo-600" />
+          <ShieldCheck className="w-8 h-8 text-neutral-600" />
           Lost & Found Claim Verification Center
         </h1>
         <p className="text-neutral-500 mt-1">
@@ -105,7 +105,7 @@ export default function AdminLostFound() {
                       <td className="p-4">
                         <button
                           onClick={() => setSelectedItem(item)}
-                          className="px-3 py-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg text-xs font-semibold"
+                          className="px-3 py-1 bg-neutral-100 text-neutral-700 hover:bg-neutral-200 rounded-lg text-xs font-semibold"
                         >
                           {claimsCount} Claims
                         </button>
