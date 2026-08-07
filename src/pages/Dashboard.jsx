@@ -134,92 +134,68 @@ function Dashboard() {
         {/* Pending Card */}
         <div 
           onClick={() => navigate("/complaints")} 
-          className="group relative bg-white border border-neutral-200/90 rounded-2xl p-5 hover:shadow-xl hover:border-amber-300 transition-all duration-300 cursor-pointer overflow-hidden"
+          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-neutral-300 transition-all duration-200 cursor-pointer"
         >
-          <div className="flex items-center justify-between mb-3.5">
-            <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-200/60 text-amber-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
-              <Bell size={20} />
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center">
+              <Bell size={19} />
             </div>
-            <span className="text-[10px] font-extrabold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
-              Needs Review
-            </span>
+            <ArrowUpRight size={16} className="text-neutral-300 group-hover:text-amber-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
           </div>
-          <div className="space-y-0.5">
-            <p className="text-3xl sm:text-4xl font-black text-neutral-950 tracking-tighter">{pending}</p>
-            <p className="text-xs font-bold text-neutral-500">Pending Complaints</p>
-          </div>
-          <div className="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-neutral-800 transition-colors">
-            <span>Review Queue</span>
-            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          <div>
+            <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{pending}</p>
+            <p className="text-xs font-semibold text-neutral-500 mt-1">Pending Complaints</p>
           </div>
         </div>
 
         {/* In Progress Card */}
         <div 
           onClick={() => navigate("/complaints")} 
-          className="group relative bg-white border border-neutral-200/90 rounded-2xl p-5 hover:shadow-xl hover:border-sky-300 transition-all duration-300 cursor-pointer overflow-hidden"
+          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-neutral-300 transition-all duration-200 cursor-pointer"
         >
-          <div className="flex items-center justify-between mb-3.5">
-            <div className="w-11 h-11 rounded-xl bg-sky-500/10 border border-sky-200/60 text-sky-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
-              <Activity size={20} />
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center">
+              <Activity size={19} />
             </div>
-            <span className="text-[10px] font-extrabold text-sky-800 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-200">
-              In Progress
-            </span>
+            <ArrowUpRight size={16} className="text-neutral-300 group-hover:text-sky-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
           </div>
-          <div className="space-y-0.5">
-            <p className="text-3xl sm:text-4xl font-black text-neutral-950 tracking-tighter">{inProgress}</p>
-            <p className="text-xs font-bold text-neutral-500">Assigned / Active</p>
-          </div>
-          <div className="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-neutral-800 transition-colors">
-            <span>Staff Working</span>
-            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          <div>
+            <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{inProgress}</p>
+            <p className="text-xs font-semibold text-neutral-500 mt-1">In Progress</p>
           </div>
         </div>
 
         {/* Resolved Card */}
         <div 
           onClick={() => navigate("/complaints")} 
-          className="group relative bg-white border border-neutral-200/90 rounded-2xl p-5 hover:shadow-xl hover:border-emerald-300 transition-all duration-300 cursor-pointer overflow-hidden"
+          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-neutral-300 transition-all duration-200 cursor-pointer"
         >
-          <div className="flex items-center justify-between mb-3.5">
-            <div className="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-200/60 text-emerald-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
-              <CheckCircle2 size={20} />
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center">
+              <CheckCircle2 size={19} />
             </div>
-            <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-              Resolved
-            </span>
+            <ArrowUpRight size={16} className="text-neutral-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
           </div>
-          <div className="space-y-0.5">
-            <p className="text-3xl sm:text-4xl font-black text-neutral-950 tracking-tighter">{resolved}</p>
-            <p className="text-xs font-bold text-neutral-500">Resolved Issues</p>
-          </div>
-          <div className="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-neutral-800 transition-colors">
-            <span>Closed Tickets</span>
-            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          <div>
+            <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{resolved}</p>
+            <p className="text-xs font-semibold text-neutral-500 mt-1">Resolved Issues</p>
           </div>
         </div>
 
         {/* SOS Card */}
         <div 
           onClick={() => navigate("/file-complaint")} 
-          className="group relative bg-white border border-neutral-200/90 rounded-2xl p-5 hover:shadow-xl hover:border-rose-300 transition-all duration-300 cursor-pointer overflow-hidden"
+          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-neutral-300 transition-all duration-200 cursor-pointer"
         >
-          <div className="flex items-center justify-between mb-3.5">
-            <div className="w-11 h-11 rounded-xl bg-rose-500/10 border border-rose-200/60 text-rose-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
-              <AlertTriangle size={20} />
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center">
+              <AlertTriangle size={19} />
             </div>
-            <span className="text-[10px] font-extrabold text-rose-800 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
-              SOS Alert
-            </span>
+            <ArrowUpRight size={16} className="text-neutral-300 group-hover:text-rose-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
           </div>
-          <div className="space-y-0.5">
-            <p className="text-3xl sm:text-4xl font-black text-neutral-950 tracking-tighter">{sosCount}</p>
-            <p className="text-xs font-bold text-neutral-500">SOS Incident Logs</p>
-          </div>
-          <div className="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-rose-600 transition-colors">
-            <span>Emergency Dispatch</span>
-            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          <div>
+            <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{sosCount}</p>
+            <p className="text-xs font-semibold text-neutral-500 mt-1">SOS Incident Logs</p>
           </div>
         </div>
       </div>
