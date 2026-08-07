@@ -113,11 +113,11 @@ export default function FileComplaint() {
       <Toast toast={toast} onClose={() => setToast(null)} />
 
       <div>
-        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+        <h1 className="text-3xl font-extrabold text-neutral-900 tracking-tight flex items-center gap-3">
           {mode === "emergency" ? (
             <AlertTriangle className="w-8 h-8 text-rose-600 animate-pulse" />
           ) : (
-            <MessageSquare className="w-8 h-8 text-indigo-600" />
+            <MessageSquare className="w-8 h-8 text-neutral-900" />
           )}
           Issue & Emergency Reporting
         </h1>
@@ -126,15 +126,15 @@ export default function FileComplaint() {
         </p>
       </div>
 
-      {/* M3 Segmented Button Group */}
-      <div className="flex bg-slate-200/60 p-1.5 rounded-full border border-slate-300/60">
+      {/* Segmented Button Group */}
+      <div className="flex bg-neutral-100 p-1.5 rounded-full border border-neutral-200">
         <button
           type="button"
           onClick={() => setMode("complaint")}
           className={`flex-1 py-3 rounded-full text-xs font-bold transition-all flex items-center justify-center gap-2 ${
             mode === "complaint"
-              ? "bg-indigo-600 text-white shadow-md shadow-indigo-200"
-              : "text-slate-700 hover:text-slate-950"
+              ? "bg-neutral-900 text-white shadow-md shadow-neutral-900/10"
+              : "text-neutral-600 hover:text-neutral-900"
           }`}
         >
           <MessageSquare className="w-4 h-4" /> Standard Complaint
@@ -156,31 +156,31 @@ export default function FileComplaint() {
       {mode === "complaint" ? (
         <form onSubmit={handleSubmitComplaint} className="m3-card p-6 md:p-8 space-y-6">
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Complaint Title *</label>
+            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Complaint Title *</label>
             <input
               type="text"
               required
               placeholder="e.g. Broken AC dripping water in Library Silent Study Zone"
               value={complaintForm.title}
               onChange={e => setComplaintForm({ ...complaintForm, title: e.target.value })}
-              className="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white"
+              className="w-full p-3.5 bg-neutral-50 rounded-2xl border border-neutral-200 text-sm font-medium text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:bg-white"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Department Category *</label>
+              <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Department Category *</label>
               <select
                 value={complaintForm.category}
                 onChange={e => setComplaintForm({ ...complaintForm, category: e.target.value })}
-                className="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white"
+                className="w-full p-3.5 bg-neutral-50 rounded-2xl border border-neutral-200 text-sm font-medium text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:bg-white"
               >
                 {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Priority Level *</label>
+              <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Priority Level *</label>
               <div className="grid grid-cols-4 gap-2">
                 {PRIORITIES.map(p => (
                   <button
@@ -191,8 +191,8 @@ export default function FileComplaint() {
                       complaintForm.priority === p
                         ? p === "Urgent" || p === "High"
                           ? "bg-rose-600 text-white shadow-xs"
-                          : "bg-indigo-600 text-white shadow-xs"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200/60"
+                          : "bg-neutral-900 text-white shadow-xs"
+                        : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200/60"
                     }`}
                   >
                     {p}
@@ -203,35 +203,35 @@ export default function FileComplaint() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Specific Campus Location *</label>
+            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Specific Campus Location *</label>
             <input
               type="text"
               required
               placeholder="e.g. Block C, 3rd Floor Washroom / Hostel B Room 204"
               value={complaintForm.location}
               onChange={e => setComplaintForm({ ...complaintForm, location: e.target.value })}
-              className="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white"
+              className="w-full p-3.5 bg-neutral-50 rounded-2xl border border-neutral-200 text-sm font-medium text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:bg-white"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Detailed Issue Description *</label>
+            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Detailed Issue Description *</label>
             <textarea
               rows={4}
               required
               placeholder="Describe the issue, severity, and any hazards..."
               value={complaintForm.description}
               onChange={e => setComplaintForm({ ...complaintForm, description: e.target.value })}
-              className="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white"
+              className="w-full p-3.5 bg-neutral-50 rounded-2xl border border-neutral-200 text-sm font-medium text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-900/10 focus:bg-white"
             />
           </div>
 
           {/* Photos */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Photo Attachments (Max 4)</label>
+            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">Photo Attachments (Max 4)</label>
             <div className="flex items-center gap-3 flex-wrap">
               {complaintForm.photos.map((img, idx) => (
-                <div key={idx} className="w-20 h-20 bg-slate-100 rounded-2xl overflow-hidden relative group border border-slate-200">
+                <div key={idx} className="w-20 h-20 bg-neutral-100 rounded-2xl overflow-hidden relative group border border-neutral-200">
                   <img src={img} alt="attachment" className="w-full h-full object-cover" />
                   <button
                     type="button"
@@ -244,7 +244,7 @@ export default function FileComplaint() {
               ))}
 
               {complaintForm.photos.length < 4 && (
-                <label className="w-20 h-20 rounded-2xl border-2 border-dashed border-slate-300 hover:border-indigo-500 bg-slate-50 flex flex-col items-center justify-center cursor-pointer text-slate-400 hover:text-indigo-600 transition-colors">
+                <label className="w-20 h-20 rounded-2xl border-2 border-dashed border-neutral-300 hover:border-neutral-900 bg-neutral-50 flex flex-col items-center justify-center cursor-pointer text-neutral-400 hover:text-neutral-900 transition-colors">
                   <Upload className="w-5 h-5 mb-1" />
                   <span className="text-[10px] font-bold">Add Photo</span>
                   <input

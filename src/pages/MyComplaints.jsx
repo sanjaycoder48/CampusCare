@@ -144,7 +144,7 @@ export default function MyComplaints() {
           <select
             value={deptFilter}
             onChange={e => setDeptFilter(e.target.value)}
-            className="w-full p-2.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full p-2.5 bg-neutral-50 rounded-2xl border border-neutral-200 text-xs font-semibold text-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
           >
             {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
           </select>
@@ -155,7 +155,7 @@ export default function MyComplaints() {
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
-            className="w-full p-2.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full p-2.5 bg-neutral-50 rounded-2xl border border-neutral-200 text-xs font-semibold text-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
           >
             <option value="All">All Statuses</option>
             <option value="Submitted">Submitted</option>
@@ -185,17 +185,17 @@ export default function MyComplaints() {
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-950">
+                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-neutral-100 text-neutral-800 border border-neutral-200">
                     {comp.category}
                   </span>
                   <StatusBadge status={comp.status} />
                 </div>
 
-                <h3 className="font-bold text-slate-900 text-lg line-clamp-1">{comp.title}</h3>
-                <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">{comp.description}</p>
+                <h3 className="font-bold text-neutral-900 text-lg line-clamp-1">{comp.title}</h3>
+                <p className="text-xs text-neutral-600 line-clamp-2 leading-relaxed">{comp.description}</p>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center gap-2">
+              <div className="pt-3 border-t border-neutral-100 flex items-center gap-2">
                 <button
                   onClick={() => setSelectedComplaint(comp)}
                   className="m3-button-tonal w-full text-xs py-2"
@@ -217,22 +217,22 @@ export default function MyComplaints() {
           maxWidth="max-w-3xl"
         >
           <div className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-neutral-50 rounded-2xl border border-neutral-200 text-xs">
               <div>
-                <span className="text-slate-400 block mb-0.5 font-medium">Department</span>
-                <span className="font-bold text-slate-900">{selectedComplaint.category}</span>
+                <span className="text-neutral-400 block mb-0.5 font-medium">Department</span>
+                <span className="font-bold text-neutral-900">{selectedComplaint.category}</span>
               </div>
               <div>
-                <span className="text-slate-400 block mb-0.5 font-medium">Current Status</span>
+                <span className="text-neutral-400 block mb-0.5 font-medium">Current Status</span>
                 <StatusBadge status={selectedComplaint.status} />
               </div>
               <div>
-                <span className="text-slate-400 block mb-0.5 font-medium">Assigned Staff</span>
-                <span className="font-bold text-slate-900">{selectedComplaint.assignedTo || "Unassigned"}</span>
+                <span className="text-neutral-400 block mb-0.5 font-medium">Assigned Staff</span>
+                <span className="font-bold text-neutral-900">{selectedComplaint.assignedTo || "Unassigned"}</span>
               </div>
               <div>
-                <span className="text-slate-400 block mb-0.5 font-medium">Est. ETA</span>
-                <span className="font-bold text-slate-900">
+                <span className="text-neutral-400 block mb-0.5 font-medium">Est. ETA</span>
+                <span className="font-bold text-neutral-900">
                   {selectedComplaint.eta ? new Date(selectedComplaint.eta).toLocaleDateString() : "Pending"}
                 </span>
               </div>
@@ -240,16 +240,16 @@ export default function MyComplaints() {
 
             {/* Timeline */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Resolution Timeline Logs</h4>
-              <div className="space-y-3 pl-3 border-l-2 border-indigo-200">
+              <h4 className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Resolution Timeline Logs</h4>
+              <div className="space-y-3 pl-3 border-l-2 border-neutral-300">
                 {(selectedComplaint.timeline || []).map(t => (
                   <div key={t.id} className="relative pl-4 space-y-1">
-                    <div className="absolute -left-[23px] top-1.5 w-3.5 h-3.5 rounded-full bg-indigo-600 ring-4 ring-white" />
+                    <div className="absolute -left-[23px] top-1.5 w-3.5 h-3.5 rounded-full bg-neutral-900 ring-4 ring-white" />
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-slate-900">{t.author} ({t.status})</span>
-                      <span className="text-slate-400 text-[10px]">{new Date(t.date).toLocaleString()}</span>
+                      <span className="font-bold text-neutral-900">{t.author} ({t.status})</span>
+                      <span className="text-neutral-400 text-[10px]">{new Date(t.date).toLocaleString()}</span>
                     </div>
-                    <p className="text-xs text-slate-700 bg-slate-50 p-3 rounded-2xl border border-slate-200">{t.comment}</p>
+                    <p className="text-xs text-neutral-700 bg-neutral-50 p-3 rounded-2xl border border-neutral-200">{t.comment}</p>
                   </div>
                 ))}
               </div>
@@ -262,7 +262,7 @@ export default function MyComplaints() {
                 placeholder="Add a message to the resolution thread..."
                 value={newComment}
                 onChange={e => setNewComment(e.target.value)}
-                className="flex-1 p-3 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                className="flex-1 p-3 bg-neutral-50 rounded-2xl border border-neutral-200 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
               />
               <button
                 type="submit"

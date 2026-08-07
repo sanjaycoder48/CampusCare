@@ -139,8 +139,8 @@ export default function Events() {
             onClick={() => setActiveTab("events")}
             className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${
               activeTab === "events"
-                ? "bg-indigo-600 text-white shadow-xs"
-                : "text-slate-700 hover:text-slate-950"
+                ? "bg-neutral-900 text-white shadow-xs"
+                : "text-neutral-600 hover:text-neutral-900"
             }`}
           >
             Campus Events
@@ -149,8 +149,8 @@ export default function Events() {
             onClick={() => setActiveTab("clubs")}
             className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${
               activeTab === "clubs"
-                ? "bg-indigo-600 text-white shadow-xs"
-                : "text-slate-700 hover:text-slate-950"
+                ? "bg-neutral-900 text-white shadow-xs"
+                : "text-neutral-600 hover:text-neutral-900"
             }`}
           >
             Department Clubs
@@ -198,7 +198,7 @@ export default function Events() {
               <select
                 value={selectedCategory}
                 onChange={e => setSelectedCategory(e.target.value)}
-                className="w-full p-2.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full p-2.5 bg-neutral-50 rounded-2xl border border-neutral-200 text-xs font-semibold text-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
               >
                 {CATEGORIES.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -268,27 +268,27 @@ export default function Events() {
                         <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/95 backdrop-blur-md text-slate-900 shadow-xs">
                           {event.department || "General"}
                         </span>
-                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-600 text-white shadow-xs">
+                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-neutral-900 text-white shadow-xs">
                           {event.category}
                         </span>
                       </div>
                     </div>
 
                     <div className="p-6 space-y-3">
-                      <h3 className="font-bold text-slate-900 text-lg group-hover:text-indigo-600 transition-colors line-clamp-1">
+                      <h3 className="font-bold text-neutral-900 text-lg group-hover:text-black transition-colors line-clamp-1">
                         {event.title}
                       </h3>
-                      <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                      <p className="text-xs text-neutral-500 line-clamp-2 leading-relaxed">
                         {event.description}
                       </p>
 
-                      <div className="space-y-2 text-xs text-slate-600 border-t border-slate-100 pt-3">
+                      <div className="space-y-2 text-xs text-neutral-600 border-t border-neutral-100 pt-3">
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+                          <Calendar className="w-3.5 h-3.5 text-neutral-500" />
                           <span>{event.date} at {event.time || "10:00 AM"}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <MapPin className="w-3.5 h-3.5 text-indigo-600" />
+                          <MapPin className="w-3.5 h-3.5 text-neutral-500" />
                           <span className="truncate">{event.venue}</span>
                         </div>
                         <div className="flex items-center justify-between pt-1">
@@ -358,23 +358,23 @@ export default function Events() {
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-950">
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-neutral-100 text-neutral-800 border border-neutral-200">
                       {club.department} Dept
                     </span>
-                    <span className="text-xs font-semibold text-slate-500 flex items-center gap-1">
+                    <span className="text-xs font-semibold text-neutral-500 flex items-center gap-1">
                       <Users className="w-3.5 h-3.5" />
                       {club.membersCount || (club.members || []).length} Members
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-slate-900">{club.name}</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                  <h3 className="text-xl font-bold text-neutral-900">{club.name}</h3>
+                  <p className="text-xs text-neutral-600 leading-relaxed line-clamp-3">
                     {club.description}
                   </p>
 
-                  <div className="text-xs text-slate-500 pt-2 border-t border-slate-100 flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-indigo-600" />
-                    <span>Coordinator: <strong className="text-slate-800">{club.coordinator}</strong></span>
+                  <div className="text-xs text-neutral-500 pt-2 border-t border-neutral-100 flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-neutral-500" />
+                    <span>Coordinator: <strong className="text-neutral-800">{club.coordinator}</strong></span>
                   </div>
                 </div>
 
@@ -492,10 +492,10 @@ export default function Events() {
           onClose={() => setCertificateModalEvent(null)}
           title="Official Certificate of Completion"
         >
-          <div className="p-8 bg-gradient-to-br from-amber-50/60 via-white to-indigo-50/60 border-4 border-double border-amber-300 rounded-[28px] text-center space-y-4 shadow-sm">
+          <div className="p-8 bg-gradient-to-br from-amber-50/60 via-white to-neutral-50 border-4 border-double border-amber-300 rounded-[28px] text-center space-y-4 shadow-sm">
             <Award className="w-16 h-16 text-amber-500 mx-auto" />
             <h2 className="text-xl font-serif font-bold text-slate-900 tracking-wide uppercase">Certificate of Participation</h2>
-            <p className="text-xs text-slate-600">This certifies that <strong className="text-indigo-700">{userEmail}</strong> participated in</p>
+            <p className="text-xs text-slate-600">This certifies that <strong className="text-neutral-900">{userEmail}</strong> participated in</p>
             <p className="text-sm font-extrabold text-slate-900">{certificateModalEvent.title}</p>
           </div>
         </Modal>

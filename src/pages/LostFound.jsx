@@ -167,7 +167,7 @@ export default function LostFound() {
           <select
             value={categoryFilter}
             onChange={e => setCategoryFilter(e.target.value)}
-            className="w-full p-2.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            className="w-full p-2.5 bg-neutral-50 rounded-2xl border border-neutral-200 text-xs font-semibold text-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
           >
             {CATEGORIES.map(cat => (
               <option key={cat} value={cat}>{cat}</option>
@@ -181,7 +181,7 @@ export default function LostFound() {
               key={t}
               onClick={() => setTypeFilter(t)}
               className={`flex-1 py-1.5 rounded-full text-xs font-bold transition-all ${
-                typeFilter === t ? "bg-white text-indigo-700 shadow-xs" : "text-slate-500"
+                typeFilter === t ? "bg-white text-neutral-900 shadow-xs" : "text-slate-500"
               }`}
             >
               {t}
@@ -246,11 +246,11 @@ export default function LostFound() {
 
                     <div className="space-y-1.5 text-xs text-slate-500 pt-2 border-t border-slate-100">
                       <div className="flex items-center gap-2">
-                        <MapPin className="w-3.5 h-3.5 text-indigo-600" />
+                        <MapPin className="w-3.5 h-3.5 text-neutral-500" />
                         <span className="truncate">{item.location}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+                        <Calendar className="w-3.5 h-3.5 text-neutral-500" />
                         <span>Date: {item.date}</span>
                       </div>
                     </div>
@@ -368,7 +368,7 @@ export default function LostFound() {
               type="file"
               accept="image/*"
               onChange={handleImageUpload}
-              className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-100 file:text-indigo-900"
+              className="w-full text-xs text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-neutral-100 file:text-neutral-900"
             />
           </div>
 
