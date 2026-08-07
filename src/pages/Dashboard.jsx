@@ -134,68 +134,112 @@ function Dashboard() {
         {/* Pending Card */}
         <div 
           onClick={() => navigate("/complaints")} 
-          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-neutral-300 transition-all duration-200 cursor-pointer"
+          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-amber-200/90 transition-all duration-200 cursor-pointer flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center">
-              <Bell size={19} />
-            </div>
-            <ArrowUpRight size={16} className="text-neutral-300 group-hover:text-amber-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-          </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{pending}</p>
-            <p className="text-xs font-semibold text-neutral-500 mt-1">Pending Complaints</p>
+            <div className="flex items-center justify-between mb-3.5">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Bell size={19} />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200/60">
+                  <Clock size={10} /> Queue
+                </span>
+                <ArrowUpRight size={15} className="text-neutral-300 group-hover:text-amber-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+              </div>
+            </div>
+            <div>
+              <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{pending}</p>
+              <p className="text-xs font-semibold text-neutral-500 mt-1">Pending Complaints</p>
+            </div>
+          </div>
+          {/* Micro Progress Indicator */}
+          <div className="mt-4 w-full h-1 bg-neutral-100 rounded-full overflow-hidden">
+            <div className="h-full bg-amber-400 rounded-full transition-all duration-500" style={{ width: pending > 0 ? `${Math.min(pending * 25, 100)}%` : '10%' }} />
           </div>
         </div>
 
         {/* In Progress Card */}
         <div 
           onClick={() => navigate("/complaints")} 
-          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-neutral-300 transition-all duration-200 cursor-pointer"
+          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-sky-200/90 transition-all duration-200 cursor-pointer flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center">
-              <Activity size={19} />
-            </div>
-            <ArrowUpRight size={16} className="text-neutral-300 group-hover:text-sky-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-          </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{inProgress}</p>
-            <p className="text-xs font-semibold text-neutral-500 mt-1">In Progress</p>
+            <div className="flex items-center justify-between mb-3.5">
+              <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Activity size={19} />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200/60">
+                  <Activity size={10} /> Active
+                </span>
+                <ArrowUpRight size={15} className="text-neutral-300 group-hover:text-sky-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+              </div>
+            </div>
+            <div>
+              <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{inProgress}</p>
+              <p className="text-xs font-semibold text-neutral-500 mt-1">In Progress</p>
+            </div>
+          </div>
+          {/* Micro Progress Indicator */}
+          <div className="mt-4 w-full h-1 bg-neutral-100 rounded-full overflow-hidden">
+            <div className="h-full bg-sky-500 rounded-full transition-all duration-500" style={{ width: inProgress > 0 ? `${Math.min(inProgress * 30, 100)}%` : '10%' }} />
           </div>
         </div>
 
         {/* Resolved Card */}
         <div 
           onClick={() => navigate("/complaints")} 
-          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-neutral-300 transition-all duration-200 cursor-pointer"
+          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-emerald-200/90 transition-all duration-200 cursor-pointer flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center">
-              <CheckCircle2 size={19} />
-            </div>
-            <ArrowUpRight size={16} className="text-neutral-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-          </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{resolved}</p>
-            <p className="text-xs font-semibold text-neutral-500 mt-1">Resolved Issues</p>
+            <div className="flex items-center justify-between mb-3.5">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <CheckCircle2 size={19} />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                  <TrendingUp size={10} /> Done
+                </span>
+                <ArrowUpRight size={15} className="text-neutral-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+              </div>
+            </div>
+            <div>
+              <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{resolved}</p>
+              <p className="text-xs font-semibold text-neutral-500 mt-1">Resolved Issues</p>
+            </div>
+          </div>
+          {/* Micro Progress Indicator */}
+          <div className="mt-4 w-full h-1 bg-neutral-100 rounded-full overflow-hidden">
+            <div className="h-full bg-emerald-500 rounded-full transition-all duration-500" style={{ width: resolved > 0 ? '100%' : '10%' }} />
           </div>
         </div>
 
         {/* SOS Card */}
         <div 
           onClick={() => navigate("/file-complaint")} 
-          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-neutral-300 transition-all duration-200 cursor-pointer"
+          className="group bg-white border border-neutral-200/80 rounded-2xl p-5 hover:shadow-md hover:border-rose-200/90 transition-all duration-200 cursor-pointer flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center">
-              <AlertTriangle size={19} />
-            </div>
-            <ArrowUpRight size={16} className="text-neutral-300 group-hover:text-rose-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-          </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{sosCount}</p>
-            <p className="text-xs font-semibold text-neutral-500 mt-1">SOS Incident Logs</p>
+            <div className="flex items-center justify-between mb-3.5">
+              <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <AlertTriangle size={19} />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200/60">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" /> Urgent
+                </span>
+                <ArrowUpRight size={15} className="text-neutral-300 group-hover:text-rose-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+              </div>
+            </div>
+            <div>
+              <p className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">{sosCount}</p>
+              <p className="text-xs font-semibold text-neutral-500 mt-1">SOS Incident Logs</p>
+            </div>
+          </div>
+          {/* Micro Progress Indicator */}
+          <div className="mt-4 w-full h-1 bg-neutral-100 rounded-full overflow-hidden">
+            <div className="h-full bg-rose-500 rounded-full transition-all duration-500" style={{ width: sosCount > 0 ? `${Math.min(sosCount * 50, 100)}%` : '5%' }} />
           </div>
         </div>
       </div>
