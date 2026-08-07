@@ -91,43 +91,43 @@ function Dashboard() {
     <div className="p-4 sm:p-6 md:p-8 lg:p-10 max-w-[1400px] mx-auto space-y-8 animate-in fade-in duration-300">
 
       {/* ─── Hero Banner ─── */}
-      <div className="relative overflow-hidden bg-neutral-950 text-white rounded-3xl p-6 sm:p-8 md:p-10 shadow-2xl border border-neutral-800/80">
-        {/* Glow Spheres */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-neutral-700/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 left-1/4 w-80 h-80 bg-neutral-500/10 rounded-full blur-2xl pointer-events-none" />
+      <div className="relative overflow-hidden bg-gradient-to-r from-neutral-950 via-neutral-900 to-neutral-950 text-white rounded-3xl p-6 sm:p-8 md:p-9 shadow-xl border border-neutral-800">
+        {/* Subtle Ambient Background Gradients */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-neutral-700/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 left-1/3 w-80 h-80 bg-neutral-600/10 rounded-full blur-2xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-          <div className="space-y-3 max-w-2xl">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] font-bold text-neutral-300">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-2.5 max-w-2xl">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-900/90 border border-neutral-800 text-[11px] font-bold text-neutral-300 backdrop-blur-sm">
                 <Radio size={12} className="text-emerald-400 animate-pulse" /> Live Campus Network
               </span>
-              <span className="text-xs text-neutral-500 font-medium">
+              <span className="text-xs text-neutral-400 font-medium">
                 {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
               {getGreeting()}, <span className="text-neutral-300">Student</span> 👋
             </h1>
 
             <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed font-normal max-w-xl">
-              Welcome to your central CampusCare hub. Manage complaints, check crowd metrics, explore department clubs, and report urgent issues.
+              Your unified student portal. Manage campus tickets, monitor mess crowd status, access course syllabus guides, and submit incident logs.
             </p>
           </div>
 
           <div className="flex items-center gap-3 shrink-0 flex-wrap">
             <button
               onClick={() => navigate("/file-complaint")}
-              className="flex items-center gap-2 px-6 py-3.5 bg-white text-neutral-950 text-xs font-black rounded-2xl hover:bg-neutral-100 shadow-xl hover:shadow-2xl transition-all duration-200 active:scale-[0.98]"
+              className="flex items-center gap-2 px-5 py-3 bg-white text-neutral-950 text-xs font-black rounded-xl hover:bg-neutral-100 shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.98]"
             >
-              <PenLine size={16} /> File New Complaint
+              <PenLine size={15} /> File New Complaint
             </button>
             <button
               onClick={() => navigate("/file-complaint")}
-              className="flex items-center gap-2 px-5 py-3.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-extrabold rounded-2xl border border-rose-500/40 shadow-lg shadow-rose-950/40 transition-all duration-200 active:scale-[0.98]"
+              className="flex items-center gap-2 px-4 py-3 bg-rose-600 hover:bg-rose-500 text-white text-xs font-extrabold rounded-xl border border-rose-500/30 shadow-md shadow-rose-950/40 transition-all duration-200 active:scale-[0.98]"
             >
-              <AlertTriangle size={16} /> SOS Dispatch
+              <AlertTriangle size={15} /> SOS Dispatch
             </button>
           </div>
         </div>
@@ -138,21 +138,21 @@ function Dashboard() {
         {/* Pending Card */}
         <div 
           onClick={() => navigate("/complaints")} 
-          className="group relative bg-white border border-neutral-200/90 rounded-3xl p-6 hover:shadow-xl hover:border-amber-300 transition-all duration-300 cursor-pointer overflow-hidden"
+          className="group relative bg-white border border-neutral-200/90 rounded-2xl p-5 hover:shadow-xl hover:border-amber-300 transition-all duration-300 cursor-pointer overflow-hidden"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-200/60 text-amber-600 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-              <Bell size={22} />
+          <div className="flex items-center justify-between mb-3.5">
+            <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-200/60 text-amber-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
+              <Bell size={20} />
             </div>
-            <span className="text-[10px] font-black text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+            <span className="text-[10px] font-extrabold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
               Needs Review
             </span>
           </div>
-          <div className="space-y-1">
-            <p className="text-4xl font-black text-neutral-950 tracking-tighter">{pending}</p>
+          <div className="space-y-0.5">
+            <p className="text-3xl sm:text-4xl font-black text-neutral-950 tracking-tighter">{pending}</p>
             <p className="text-xs font-bold text-neutral-500">Pending Complaints</p>
           </div>
-          <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-neutral-800 transition-colors">
+          <div className="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-neutral-800 transition-colors">
             <span>Review Queue</span>
             <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </div>
@@ -161,21 +161,21 @@ function Dashboard() {
         {/* In Progress Card */}
         <div 
           onClick={() => navigate("/complaints")} 
-          className="group relative bg-white border border-neutral-200/90 rounded-3xl p-6 hover:shadow-xl hover:border-sky-300 transition-all duration-300 cursor-pointer overflow-hidden"
+          className="group relative bg-white border border-neutral-200/90 rounded-2xl p-5 hover:shadow-xl hover:border-sky-300 transition-all duration-300 cursor-pointer overflow-hidden"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-200/60 text-sky-600 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-              <Activity size={22} />
+          <div className="flex items-center justify-between mb-3.5">
+            <div className="w-11 h-11 rounded-xl bg-sky-500/10 border border-sky-200/60 text-sky-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
+              <Activity size={20} />
             </div>
-            <span className="text-[10px] font-black text-sky-800 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-200">
+            <span className="text-[10px] font-extrabold text-sky-800 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-200">
               In Progress
             </span>
           </div>
-          <div className="space-y-1">
-            <p className="text-4xl font-black text-neutral-950 tracking-tighter">{inProgress}</p>
+          <div className="space-y-0.5">
+            <p className="text-3xl sm:text-4xl font-black text-neutral-950 tracking-tighter">{inProgress}</p>
             <p className="text-xs font-bold text-neutral-500">Assigned / Active</p>
           </div>
-          <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-neutral-800 transition-colors">
+          <div className="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-neutral-800 transition-colors">
             <span>Staff Working</span>
             <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </div>
@@ -184,21 +184,21 @@ function Dashboard() {
         {/* Resolved Card */}
         <div 
           onClick={() => navigate("/complaints")} 
-          className="group relative bg-white border border-neutral-200/90 rounded-3xl p-6 hover:shadow-xl hover:border-emerald-300 transition-all duration-300 cursor-pointer overflow-hidden"
+          className="group relative bg-white border border-neutral-200/90 rounded-2xl p-5 hover:shadow-xl hover:border-emerald-300 transition-all duration-300 cursor-pointer overflow-hidden"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-200/60 text-emerald-600 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-              <CheckCircle2 size={22} />
+          <div className="flex items-center justify-between mb-3.5">
+            <div className="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-200/60 text-emerald-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
+              <CheckCircle2 size={20} />
             </div>
-            <span className="text-[10px] font-black text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+            <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
               Resolved
             </span>
           </div>
-          <div className="space-y-1">
-            <p className="text-4xl font-black text-neutral-950 tracking-tighter">{resolved}</p>
+          <div className="space-y-0.5">
+            <p className="text-3xl sm:text-4xl font-black text-neutral-950 tracking-tighter">{resolved}</p>
             <p className="text-xs font-bold text-neutral-500">Resolved Issues</p>
           </div>
-          <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-neutral-800 transition-colors">
+          <div className="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-neutral-800 transition-colors">
             <span>Closed Tickets</span>
             <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </div>
@@ -207,21 +207,21 @@ function Dashboard() {
         {/* SOS Card */}
         <div 
           onClick={() => navigate("/file-complaint")} 
-          className="group relative bg-white border border-neutral-200/90 rounded-3xl p-6 hover:shadow-xl hover:border-rose-300 transition-all duration-300 cursor-pointer overflow-hidden"
+          className="group relative bg-white border border-neutral-200/90 rounded-2xl p-5 hover:shadow-xl hover:border-rose-300 transition-all duration-300 cursor-pointer overflow-hidden"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-200/60 text-rose-600 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
-              <AlertTriangle size={22} />
+          <div className="flex items-center justify-between mb-3.5">
+            <div className="w-11 h-11 rounded-xl bg-rose-500/10 border border-rose-200/60 text-rose-600 flex items-center justify-center font-bold group-hover:scale-105 transition-transform">
+              <AlertTriangle size={20} />
             </div>
-            <span className="text-[10px] font-black text-rose-800 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
+            <span className="text-[10px] font-extrabold text-rose-800 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
               SOS Alert
             </span>
           </div>
-          <div className="space-y-1">
-            <p className="text-4xl font-black text-neutral-950 tracking-tighter">{sosCount}</p>
+          <div className="space-y-0.5">
+            <p className="text-3xl sm:text-4xl font-black text-neutral-950 tracking-tighter">{sosCount}</p>
             <p className="text-xs font-bold text-neutral-500">SOS Incident Logs</p>
           </div>
-          <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-rose-600 transition-colors">
+          <div className="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-[11px] font-semibold text-neutral-400 group-hover:text-rose-600 transition-colors">
             <span>Emergency Dispatch</span>
             <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </div>
